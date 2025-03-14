@@ -48,6 +48,8 @@ namespace Eden
             Focused = false;
             foreach (var entity in Entities)
                 entity.SceneEnd(this);
+
+            TextureBank.OnSceneEnd();
         }
 
         public virtual void BeforeUpdate()
@@ -92,16 +94,6 @@ namespace Eden
         public virtual void AfterRender()
         {
             RendererList.AfterRender();
-        }
-
-        public virtual void GainFocus()
-        {
-
-        }
-
-        public virtual void LoseFocus()
-        {
-
         }
 
         #region Interval

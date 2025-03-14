@@ -14,7 +14,7 @@ namespace Eden.Graphics
 
         public GraphicsComponent() : base(true, true)
         {
-            
+
         }
 
         public void Justify(float x, float y)

@@ -27,7 +27,8 @@ namespace Eden.Util
             }
             else
             {
-                if (sceneTextures.TryGetValue(path, out Texture2D outTex)){
+                if (sceneTextures.TryGetValue(path, out Texture2D outTex))
+                {
                     return outTex;
                 }
                 Texture2D tex = Raylib.LoadTexture(path);
@@ -38,6 +39,10 @@ namespace Eden.Util
 
         public static void OnSceneEnd()
         {
+            foreach (var kv in sceneTextures)
+            {
+                Raylib.UnloadTexture(kv.Value);
+            }
             sceneTextures.Clear();
         }
     }

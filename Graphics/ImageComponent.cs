@@ -10,7 +10,7 @@ namespace Eden.Graphics
         public override int Width => Texture.Width;
         public override int Height => Texture.Height;
 
-        public ImageComponent(string path, Rectangle clipRect)
+        public ImageComponent(string path, Rectangle clipRect) : this(path)
         {
             Texture = Raylib.LoadTexture(path);
             ClipRect = clipRect;
@@ -18,6 +18,12 @@ namespace Eden.Graphics
 
         public ImageComponent(string path, int x, int y, int width, int height) : this(path, new Rectangle(x, y, width, height))
         {
+        }
+
+        public ImageComponent(string path)
+        {
+            Texture = Raylib.LoadTexture(path);
+            ClipRect = new Rectangle(0, 0, Width, Height);
         }
 
         public override void Render()
