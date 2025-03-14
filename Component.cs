@@ -1,24 +1,47 @@
-using System.IO.Compression;
-
 namespace Eden
 {
     public class Component
     {
-        Entity Parent;
-        public bool Active { get; set; } = true;
-        public bool Visible { get; set; } = true;
+        public Entity Entity { get; private set; }
+        public bool Active;
+        public bool Visible;
 
-        public Component()
+        public Component(bool active, bool visible)
         {
-
+            Active = active;
+            Visible = visible;
         }
 
         public virtual void Added(Entity entity)
         {
-
+            Entity = entity; 
+            if (Scene != null)
+                Scene.Tracker.ComponentAdded(this);
         }
 
         public virtual void Removed(Entity entity)
+        {
+            if (Scene != null)
+                Scene.Tracker.ComponentRemoved(this);
+            Entity = null;
+        }
+
+        public virtual void EntityAdded(Scene scene)
+        {
+            scene.Tracker.ComponentAdded(this);
+        }
+
+        public virtual void EntityRemoved(Scene scene)
+        {
+            scene.Tracker.ComponentRemoved(this);
+        }
+
+        public virtual void SceneEnd(Scene scene)
+        {
+
+        }
+
+        public virtual void EntityAwake()
         {
 
         }
@@ -33,5 +56,40 @@ namespace Eden
 
         }
 
+        public virtual void DebugRender()
+        {
+
+        }
+
+        public virtual void HandleGraphicsReset()
+        {
+
+        }
+
+        public virtual void HandleGraphicsCreate()
+        {
+
+        }
+
+        public void RemoveSelf()
+        {
+            if (Entity != null)
+                Entity.Remove(this);
+        }
+
+        public T SceneAs<T>() where T : Scene
+        {
+            return Scene as T;
+        }
+
+        public T EntityAs<T>() where T : Entity
+        {
+            return Entity as T;
+        }
+
+        public Scene Scene
+        {
+            get { return Entity?.Scene; }
+        }
     }
 }

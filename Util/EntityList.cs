@@ -1,26 +1,42 @@
-
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Eden.Util
+namespace Eden
 {
     public class EntityList : IEnumerable<Entity>, IEnumerable
     {
-        public int Count => entities.Count;
+        public Scene Scene { get; private set; }
 
-        private Scene Scene;
+        private List<Entity> entities;
+        private List<Entity> toAdd;
+        private List<Entity> toAwake;
+        private List<Entity> toRemove;
 
-        private List<Entity> entities = [];
-        private List<Entity> toAdd = [];
-        private List<Entity> toRemove = [];
-
-        private HashSet<Entity> current = [];
-        private HashSet<Entity> adding = [];
-        private HashSet<Entity> removing = [];
+        private HashSet<Entity> current;
+        private HashSet<Entity> adding;
+        private HashSet<Entity> removing;
 
         private bool unsorted;
 
-        public EntityList(Scene scene){
+        internal EntityList(Scene scene)
+        {
             Scene = scene;
+
+            entities = new List<Entity>();
+            toAdd = new List<Entity>();
+            toAwake = new List<Entity>();
+            toRemove = new List<Entity>();
+
+            current = new HashSet<Entity>();
+            adding = new HashSet<Entity>();
+            removing = new HashSet<Entity>();
+        }
+
+        internal void MarkUnsorted()
+        {
+            unsorted = true;
         }
 
         public void UpdateLists()
@@ -32,9 +48,15 @@ namespace Eden.Util
                     var entity = toAdd[i];
                     if (!current.Contains(entity))
                     {
-                        entity.Added(Scene);
                         current.Add(entity);
                         entities.Add(entity);
+
+                        if (Scene != null)
+                        {
+                            Scene.TagLists.EntityAdded(entity);
+                            Scene.Tracker.EntityAdded(entity);
+                            entity.Added(Scene);
+                        }
                     }
                 }
 
@@ -48,9 +70,15 @@ namespace Eden.Util
                     var entity = toRemove[i];
                     if (entities.Contains(entity))
                     {
-                        entity.Removed(Scene);
                         current.Remove(entity);
                         entities.Remove(entity);
+
+                        if (Scene != null)
+                        {
+                            entity.Removed(Scene);
+                            Scene.TagLists.EntityRemoved(entity);
+                            Scene.Tracker.EntityRemoved(entity);
+                        }
                     }
                 }
 
@@ -66,26 +94,14 @@ namespace Eden.Util
 
             if (toAdd.Count > 0)
             {
+                toAwake.AddRange(toAdd);
                 toAdd.Clear();
                 adding.Clear();
-            }
-        }
 
-        public virtual void Update()
-        {
-            foreach(Entity ent in entities){
-                if(ent.Active){
-                    ent.Update();
-                }
-            }
-        }
-
-        public virtual void Render()
-        {
-            foreach(Entity ent in entities){
-                if(ent.Visible){
-                    ent.Render();
-                }
+                foreach (var entity in toAwake)
+                    if (entity.Scene == Scene)
+                        entity.Awake(Scene);
+                toAwake.Clear();
             }
         }
 
@@ -131,6 +147,55 @@ namespace Eden.Util
                 Remove(entities[i]);
         }
 
+        public int Count
+        {
+            get
+            {
+                return entities.Count;
+            }
+        }
+
+        public Entity this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= entities.Count)
+                    throw new IndexOutOfRangeException();
+                else
+                    return entities[index];
+            }
+        }
+
+        public int AmountOf<T>() where T : Entity
+        {
+            int count = 0;
+            foreach (var e in entities)
+                if (e is T)
+                    count++;
+
+            return count;
+        }
+
+        public T FindFirst<T>() where T : Entity
+        {
+            foreach (var e in entities)
+                if (e is T)
+                    return e as T;
+
+            return null;
+        }
+
+        public List<T> FindAll<T>() where T : Entity
+        {
+            List<T> list = new List<T>();
+
+            foreach (var e in entities)
+                if (e is T)
+                    list.Add(e as T);
+
+            return list;
+        }
+
         public void With<T>(Action<T> action) where T : Entity
         {
             foreach (var e in entities)
@@ -140,14 +205,68 @@ namespace Eden.Util
 
         public IEnumerator<Entity> GetEnumerator()
         {
-            return GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
             return entities.GetEnumerator();
         }
 
-        public static Comparison<Entity> CompareDepth = (a, b) => { return Math.Sign(b.Depth - a.Depth); };
+        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public Entity[] ToArray()
+        {
+            return entities.ToArray<Entity>();
+        }
+
+        public bool HasVisibleEntities(int matchTags)
+        {
+            foreach (var entity in entities)
+                if (entity.Visible && entity.TagCheck(matchTags))
+                    return true;
+            return false;
+        }
+
+        internal void Update()
+        {
+            foreach (var entity in entities)
+                if (entity.Active)
+                    entity.Update();
+        }
+
+        public void Render()
+        {
+            foreach (var entity in entities)
+                if (entity.Visible)
+                    entity.Render();
+        }
+
+        public void RenderOnly(int matchTags)
+        {
+            foreach (var entity in entities)
+                if (entity.Visible && entity.TagCheck(matchTags))
+                    entity.Render();
+        }
+
+        public void RenderOnlyFullMatch(int matchTags)
+        {
+            foreach (var entity in entities)
+                if (entity.Visible && entity.TagFullCheck(matchTags))
+                    entity.Render();
+        }
+
+        public void RenderExcept(int excludeTags)
+        {
+            foreach (var entity in entities)
+                if (entity.Visible && !entity.TagCheck(excludeTags))
+                    entity.Render();
+        }
+
+        public void DebugRender()
+        {
+            foreach (var entity in entities)
+                entity.DebugRender();
+        }
+
+        public static Comparison<Entity> CompareDepth = (a, b) => { return Math.Sign(b.actualDepth - a.actualDepth); };
     }
 }

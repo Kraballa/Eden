@@ -1,158 +1,252 @@
-
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Eden.Util
 {
     public class ComponentList : IEnumerable<Component>, IEnumerable
     {
-        public int Count => components.Count;
+        public enum LockModes { Open, Locked, Error };
+        public Entity Entity { get; internal set; }
 
-        private List<Component> components = [];
-        private List<Component> toAdd = [];
-        private List<Component> toRemove = [];
+        private List<Component> components;
+        private List<Component> toAdd;
+        private List<Component> toRemove;
 
-        private HashSet<Component> current = [];
-        private HashSet<Component> adding = [];
-        private HashSet<Component> removing = [];
+        private HashSet<Component> current;
+        private HashSet<Component> adding;
+        private HashSet<Component> removing;
 
-        private bool unsorted;
+        private LockModes lockMode;
 
-        private Entity Entity;
-
-        public ComponentList(Entity entity)
+        internal ComponentList(Entity entity)
         {
             Entity = entity;
+
+            components = new List<Component>();
+            toAdd = new List<Component>();
+            toRemove = new List<Component>();
+            current = new HashSet<Component>();
+            adding = new HashSet<Component>();
+            removing = new HashSet<Component>();
         }
 
-        public void UpdateLists()
+        internal LockModes LockMode
         {
-            if (toAdd.Count > 0)
+            get
             {
-                for (int i = 0; i < toAdd.Count; i++)
+                return lockMode;
+            }
+
+            set
+            {
+                lockMode = value;
+
+                if (toAdd.Count > 0)
                 {
-                    var component = toAdd[i];
-                    if (!current.Contains(component))
+                    foreach (var component in toAdd)
                     {
-                        component.Added(Entity);
-                        current.Add(component);
-                        components.Add(component);
+                        if (!current.Contains(component))
+                        {
+                            current.Add(component);
+                            components.Add(component);
+                            component.Added(Entity);
+                        }
                     }
+
+                    adding.Clear();
+                    toAdd.Clear();
                 }
 
-                unsorted = true;
-            }
-
-            if (toRemove.Count > 0)
-            {
-                for (int i = 0; i < toRemove.Count; i++)
+                if (toRemove.Count > 0)
                 {
-                    var component = toRemove[i];
-                    if (components.Contains(component))
+                    foreach (var component in toRemove)
                     {
-                        current.Remove(component);
-                        components.Remove(component);
-                        component.Removed(Entity);
+                        if (current.Contains(component))
+                        {
+                            current.Remove(component);
+                            components.Remove(component);
+                            component.Removed(Entity);
+                        }
                     }
-                }
 
-                toRemove.Clear();
-                removing.Clear();
-            }
-
-            if (unsorted)
-            {
-                unsorted = false;
-                // components.Sort(CompareDepth);
-            }
-
-            if (toAdd.Count > 0)
-            {
-                toAdd.Clear();
-                adding.Clear();
-            }
-        }
-
-        public virtual void Update()
-        {
-            foreach (Component ent in components)
-            {
-                if (ent.Active)
-                {
-                    ent.Update();
-                }
-            }
-        }
-
-        public virtual void Render()
-        {
-            foreach (Component ent in components)
-            {
-                if (ent.Visible)
-                {
-                    ent.Render();
+                    removing.Clear();
+                    toRemove.Clear();
                 }
             }
         }
 
         public void Add(Component component)
         {
-            if (!adding.Contains(component) && !current.Contains(component))
+            switch (lockMode)
             {
-                adding.Add(component);
-                toAdd.Add(component);
+                case LockModes.Open:
+                    if (!current.Contains(component))
+                    {
+                        current.Add(component);
+                        components.Add(component);
+                        component.Added(Entity);
+                    }
+                    break;
+
+                case LockModes.Locked:
+                    if (!current.Contains(component) && !adding.Contains(component))
+                    {
+                        adding.Add(component);
+                        toAdd.Add(component);
+                    }
+                    break;
+
+                case LockModes.Error:
+                    throw new Exception("Cannot add or remove Entities at this time!");
             }
         }
 
         public void Remove(Component component)
         {
-            if (!removing.Contains(component) && current.Contains(component))
+            switch (lockMode)
             {
-                removing.Add(component);
-                toRemove.Add(component);
+                case LockModes.Open:
+                    if (current.Contains(component))
+                    {
+                        current.Remove(component);
+                        components.Remove(component);
+                        component.Removed(Entity);
+                    }
+                    break;
+
+                case LockModes.Locked:
+                    if (current.Contains(component) && !removing.Contains(component))
+                    {
+                        removing.Add(component);
+                        toRemove.Add(component);
+                    }
+                    break;
+
+                case LockModes.Error:
+                    throw new Exception("Cannot add or remove Entities at this time!");
             }
         }
 
         public void Add(IEnumerable<Component> components)
         {
-            foreach (var Component in components)
-                Add(Component);
+            foreach (var component in components)
+                Add(component);
         }
 
         public void Remove(IEnumerable<Component> components)
         {
-            foreach (var Component in components)
-                Remove(Component);
+            foreach (var component in components)
+                Remove(component);
+        }
+
+        public void RemoveAll<T>() where T : Component
+        {
+            Remove(GetAll<T>());
         }
 
         public void Add(params Component[] components)
         {
-            for (int i = 0; i < components.Length; i++)
-                Add(components[i]);
+            foreach (var component in components)
+                Add(component);
         }
 
         public void Remove(params Component[] components)
         {
-            for (int i = 0; i < components.Length; i++)
-                Remove(components[i]);
+            foreach (var component in components)
+                Remove(component);
         }
 
-        public void With<T>(Action<T> action) where T : Component
+        public int Count
         {
-            foreach (var e in components)
-                if (e is T)
-                    action(e as T);
+            get
+            {
+                return components.Count;
+            }
+        }
+
+        public Component this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= components.Count)
+                    throw new IndexOutOfRangeException();
+                else
+                    return components[index];
+            }
         }
 
         public IEnumerator<Component> GetEnumerator()
         {
-            return GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
             return components.GetEnumerator();
         }
 
-        // public static Comparison<Component> CompareDepth = (a, b) => { return Math.Sign(b.Depth - a.Depth); };
+        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public Component[] ToArray()
+        {
+            return components.ToArray<Component>();
+        }
+
+        internal void Update()
+        {
+            LockMode = ComponentList.LockModes.Locked;
+            foreach (var component in components)
+                if (component.Active)
+                    component.Update();
+            LockMode = ComponentList.LockModes.Open;
+        }
+
+        internal void Render()
+        {
+            LockMode = ComponentList.LockModes.Error;
+            foreach (var component in components)
+                if (component.Visible)
+                    component.Render();
+            LockMode = ComponentList.LockModes.Open;
+        }
+
+        internal void DebugRender()
+        {
+            LockMode = ComponentList.LockModes.Error;
+            foreach (var component in components)
+                component.DebugRender();
+            LockMode = ComponentList.LockModes.Open;
+        }
+
+        internal void HandleGraphicsReset()
+        {
+            LockMode = ComponentList.LockModes.Error;
+            foreach (var component in components)
+                component.HandleGraphicsReset();
+            LockMode = ComponentList.LockModes.Open;
+        }
+
+        internal void HandleGraphicsCreate()
+        {
+            LockMode = ComponentList.LockModes.Error;
+            foreach (var component in components)
+                component.HandleGraphicsCreate();
+            LockMode = ComponentList.LockModes.Open;
+        }
+
+        public T Get<T>() where T : Component
+        {
+            foreach (var component in components)
+                if (component is T)
+                    return component as T;
+            return null;
+        }
+
+        public IEnumerable<T> GetAll<T>() where T : Component
+        {
+            foreach (var component in components)
+                if (component is T)
+                    yield return component as T;
+        }
     }
 }
