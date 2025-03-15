@@ -73,6 +73,7 @@ namespace Eden
             Raylib.ClearBackground(Color.Black);
             Scene.Render();
             Raylib.DrawText(Log, 1, 1, 20, Color.White);
+            Raylib.DrawFPS(1,1);
             Raylib.EndDrawing();
         }
 

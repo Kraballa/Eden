@@ -210,37 +210,21 @@ namespace Eden
 
         #region Components Shortcuts
 
-        /// <summary>
-        /// Shortcut function for adding a Component to the Entity's Components list
-        /// </summary>
-        /// <param name="component">The Component to add</param>
         public void Add(Component component)
         {
             Components.Add(component);
         }
 
-        /// <summary>
-        /// Shortcut function for removing an Component from the Entity's Components list
-        /// </summary>
-        /// <param name="component">The Component to remove</param>
         public void Remove(Component component)
         {
             Components.Remove(component);
         }
 
-        /// <summary>
-        /// Shortcut function for adding a set of Components from the Entity's Components list
-        /// </summary>
-        /// <param name="components">The Components to add</param>
         public void Add(params Component[] components)
         {
             Components.Add(components);
         }
 
-        /// <summary>
-        /// Shortcut function for removing a set of Components from the Entity's Components list
-        /// </summary>
-        /// <param name="components">The Components to remove</param>
         public void Remove(params Component[] components)
         {
             Components.Remove(components);
@@ -251,19 +235,11 @@ namespace Eden
             return Components.Get<T>();
         }
 
-        /// <summary>
-        /// Allows you to iterate through all Components in the Entity
-        /// </summary>
-        /// <returns></returns>
         public IEnumerator<Component> GetEnumerator()
         {
             return Components.GetEnumerator();
         }
 
-        /// <summary>
-        /// Allows you to iterate through all Components in the Entity
-        /// </summary>
-        /// <returns></returns>
         IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
