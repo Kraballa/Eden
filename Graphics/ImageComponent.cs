@@ -45,18 +45,10 @@ namespace Eden.Graphics
             TargetRect = ClipRect;
         }
 
-        public override void Update()
-        {
-            base.Update();
-            Rotation += 1000 * Raylib.GetFrameTime();
-        }
-
         public override void Render()
         {
-            //Raylib.DrawTextureRec(Texture, ClipRect, Position, Tint);
             TargetRect.Position = Entity.Position;
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, -(Anchor * scale), Rotation, Tint);
-            Raylib.DrawCircle((int)Entity.Position.X, (int)Entity.Position.Y, 5, Color.Red);
         }
     }
 }
