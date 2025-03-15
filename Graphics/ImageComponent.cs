@@ -48,7 +48,7 @@ namespace Eden.Graphics
         public override void Render()
         {
             TargetRect.Position = Entity.Position;
-            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, -(Anchor * scale), Rotation, Tint);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Anchor * scale, Rotation, Tint);
         }
     }
 }

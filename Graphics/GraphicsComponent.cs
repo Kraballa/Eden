@@ -25,7 +25,9 @@ namespace Eden.Graphics
         /// <param name="y"></param>
         public void JustifyAnchor(float x, float y)
         {
-            Anchor = new Vector2(-Width * x, -Height * y);
+            Anchor = new Vector2(Width * x, Height * y);
         }
+
+        public void CenterAnchor() => JustifyAnchor(0.5f, 0.5f);
     }
 }

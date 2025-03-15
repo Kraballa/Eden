@@ -9,15 +9,18 @@ namespace Eden
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public bool Debug { get; set; }
         public string Title { get; private set; }
 
         public Scene Scene { get => currentScene; set => nextScene = value; }
 
         public static string Log = "";
 
-        public int FPS {
+        public int FPS
+        {
             get => TargetFPS;
-            set {
+            set
+            {
                 TargetFPS = value;
                 Raylib.SetTargetFPS(value);
             }
@@ -35,7 +38,7 @@ namespace Eden
             Height = height;
             Title = title;
 
-            FPS = Raylib.GetMonitorRefreshRate(0);
+            FPS = 60;
         }
 
         public void Run()
@@ -60,7 +63,14 @@ namespace Eden
 
         public void Update()
         {
-            if(nextScene != null){
+#if DEBUG
+            if (Raylib.IsKeyPressed(KeyboardKey.LeftAlt))
+            {
+                Debug = !Debug;
+            }
+#endif
+            if (nextScene != null)
+            {
                 currentScene = nextScene;
             }
             Scene.BeforeUpdate();
@@ -73,11 +83,15 @@ namespace Eden
             Raylib.ClearBackground(Color.Black);
             Scene.Render();
             Raylib.DrawText(Log, 1, 1, 20, Color.White);
-            Raylib.DrawFPS(1,1);
+            if (Debug)
+            {
+                Raylib.DrawFPS(1, 1);
+            }
             Raylib.EndDrawing();
         }
 
-        public static void WriteLine(string str){
+        public static void WriteLine(string str)
+        {
             Log += str + "\n";
         }
     }
