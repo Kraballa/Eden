@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Numerics;
-using Eden.Util;
 
 namespace Eden
 {
@@ -165,7 +164,7 @@ namespace Eden
                 {
                     if (Scene != null)
                     {
-                        for (int i = 0; i < Eden.Util.BitTag.TotalTags; i++)
+                        for (int i = 0; i < Eden.BitTag.TotalTags; i++)
                         {
                             int check = 1 << i;
                             bool add = (value & check) != 0;

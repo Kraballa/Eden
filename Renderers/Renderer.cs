@@ -1,4 +1,4 @@
-namespace Eden.Renderers
+namespace Eden
 {
     public abstract class Renderer
     {

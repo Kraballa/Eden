@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Numerics;
-using Eden.Renderers;
-using Eden.Util;
 using Raylib_cs;
 
 namespace Eden

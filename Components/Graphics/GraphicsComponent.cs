@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace Eden.Graphics
+namespace Eden
 {
     public abstract class GraphicsComponent : Component
     {

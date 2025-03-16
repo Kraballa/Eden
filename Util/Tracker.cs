@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Eden.Util
+namespace Eden
 {
     public class Tracker
     {

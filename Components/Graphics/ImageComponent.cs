@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace Eden.Graphics
+namespace Eden
 {
     public class ImageComponent : GraphicsComponent
     {
@@ -13,12 +13,13 @@ namespace Eden.Graphics
 
         public Vector2 Scale
         {
-            get => scale;
+            get
+            {
+                return scale * Entity.Transform.Scale;
+            }
             set
             {
                 scale = value;
-                TargetRect.Width = Width * value.X;
-                TargetRect.Height = Height * value.Y;
             }
         }
 
@@ -47,8 +48,11 @@ namespace Eden.Graphics
 
         public override void Render()
         {
+            Vector2 scaleCopy = Scale;
             TargetRect.Position = Entity.Position;
-            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Anchor * scale, Rotation, Tint);
+            TargetRect.Width = Width * scaleCopy.X;
+            TargetRect.Height = Height * scaleCopy.Y;
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Anchor * scaleCopy, Rotation + Entity.Transform.Rotation, Tint);
         }
     }
 }

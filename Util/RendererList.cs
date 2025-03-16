@@ -1,6 +1,6 @@
-using Eden.Renderers;
 
-namespace Eden.Util
+
+namespace Eden
 {
     public class RendererList
     {

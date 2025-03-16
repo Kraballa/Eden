@@ -1,8 +1,5 @@
-using System.Numerics;
-using Eden.Util;
-using Raylib_cs;
 
-namespace Eden.Renderers
+namespace Eden
 {
     public class SingleTagRenderer : Renderer
     {

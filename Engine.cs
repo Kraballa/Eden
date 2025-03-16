@@ -1,4 +1,3 @@
-using Eden.Util;
 using Raylib_cs;
 
 namespace Eden
@@ -54,6 +53,7 @@ namespace Eden
 
         public virtual void Init()
         {
+            Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
             Raylib.SetTargetFPS(TargetFPS);
             Raylib.InitWindow(Width, Height, Title);
 
@@ -69,6 +69,11 @@ namespace Eden
                 Debug = !Debug;
             }
 #endif
+            if (Raylib.IsWindowResized())
+            {
+                Width = Raylib.GetScreenWidth();
+                Height = Raylib.GetScreenHeight();
+            }
             if (nextScene != null)
             {
                 currentScene = nextScene;

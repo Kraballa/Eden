@@ -1,6 +1,6 @@
 using Raylib_cs;
 
-namespace Eden.Util
+namespace Eden
 {
     public enum ResourceScope
     {
