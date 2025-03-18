@@ -60,7 +60,6 @@ namespace Eden
             Tracker.Initialize();
         }
 
-
         public void Update()
         {
 #if DEBUG

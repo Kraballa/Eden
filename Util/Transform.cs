@@ -13,7 +13,7 @@ namespace Eden {
 
         public Transform2D(Vector2 pos){
             Position = pos;
-            Scale = Vector2.Zero;
+            Scale = Vector2.One;
             Rotation = 0;
         }
     }

@@ -75,6 +75,7 @@ namespace Eden
                 Value = 1f;
                 onChange?.Invoke(1f);
             }
+            sineCounter = (float)Random.Shared.NextDouble() * sineAdd;
 
             Active = true;
         }
@@ -83,6 +84,7 @@ namespace Eden
         {
             increment = 1f / duration;
             sineAdd = MathF.PI * 2 * frequency;
+            sineCounter = (float)Random.Shared.NextDouble() * sineAdd;
             Start();
         }
 
