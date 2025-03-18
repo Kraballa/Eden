@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 
 namespace Eden
@@ -5,6 +6,8 @@ namespace Eden
     public class Engine
     {
         public static Engine Instance;
+
+        public static Vector2 ScreenCenter => new Vector2(Instance.Width / 2, Instance.Height / 2);
 
         public int Width { get; private set; }
         public int Height { get; private set; }
@@ -85,7 +88,9 @@ namespace Eden
         {
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.Black);
+            Scene.BeforeRender();
             Scene.Render();
+            Scene.AfterRender();
             Raylib.DrawText(Log, 1, 1, 20, Color.White);
             if (Debug)
             {

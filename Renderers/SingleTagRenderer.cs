@@ -1,4 +1,5 @@
 
+using System.Numerics;
 using Raylib_cs;
 
 namespace Eden
@@ -11,7 +12,7 @@ namespace Eden
         public SingleTagRenderer(BitTag tag)
         {
             Tag = tag;
-            Camera = new Camera2D();
+            Camera = new Camera2D(Engine.ScreenCenter, Engine.ScreenCenter, 0, 1);
         }
 
         public override void BeforeRender(Scene scene)
