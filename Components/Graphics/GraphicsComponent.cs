@@ -23,11 +23,12 @@ namespace Eden
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void JustifyAnchor(float x, float y)
+        public GraphicsComponent JustifyAnchor(float x, float y)
         {
             Anchor = new Vector2(Width * x, Height * y);
+            return this;
         }
 
-        public void CenterAnchor() => JustifyAnchor(0.5f, 0.5f);
+        public GraphicsComponent CenterAnchor() => JustifyAnchor(0.5f, 0.5f);
     }
 }

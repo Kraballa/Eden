@@ -90,6 +90,8 @@ namespace Eden
             if (Debug)
             {
                 Raylib.DrawFPS(1, 1);
+                int numEnts = Scene.Entities.Count;
+                Raylib.DrawText($"num ents: {numEnts}", 1, 24, 30, Color.Red);
             }
             Raylib.EndDrawing();
         }

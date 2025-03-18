@@ -27,21 +27,21 @@ namespace Eden
 
         private Rectangle TargetRect;
 
-        public ImageComponent(string path, Rectangle clipRect) : this(path)
+        public ImageComponent(Texture2D tex, Rectangle clipRect) : this(tex)
         {
-            Texture = Raylib.LoadTexture(path);
+            Texture = tex;
             ClipRect = clipRect;
 
             TargetRect = new Rectangle(0, 0, Width, Height);
         }
 
-        public ImageComponent(string path, int x, int y, int width, int height) : this(path, new Rectangle(x, y, width, height))
+        public ImageComponent(Texture2D tex, int x, int y, int width, int height) : this(tex, new Rectangle(x, y, width, height))
         {
         }
 
-        public ImageComponent(string path)
+        public ImageComponent(Texture2D tex)
         {
-            Texture = Raylib.LoadTexture(path);
+            Texture = tex;
             ClipRect = new Rectangle(0, 0, Width, Height);
             TargetRect = ClipRect;
         }
