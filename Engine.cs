@@ -54,7 +54,7 @@ namespace Eden
             }
         }
 
-        public virtual void Init()
+        protected virtual void Init()
         {
             Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
             Raylib.SetTargetFPS(TargetFPS);
