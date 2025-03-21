@@ -5,30 +5,19 @@ namespace Eden
 {
     public abstract class GraphicsComponent : Component
     {
-        public Vector2 Anchor = new();
-        public Color Tint = Color.White;
-        public Vector2 Position => Entity.Position + Anchor;
+        public Vector2 Position;
+        public Vector2 Origin;
+        public Vector2 Scale = Vector2.One;
+
         public float Rotation;
+        public Color Tint = Color.White;
 
         public abstract int Width { get; }
         public abstract int Height { get; }
 
-        public GraphicsComponent() : base(true, true)
+        public GraphicsComponent(bool active) : base(active, true)
         {
 
         }
-
-        /// <summary>
-        /// Set anchor using justified positions. 0.5, 0.5 means the anchor is in the center.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public GraphicsComponent JustifyAnchor(float x, float y)
-        {
-            Anchor = new Vector2(Width * x, Height * y);
-            return this;
-        }
-
-        public GraphicsComponent CenterAnchor() => JustifyAnchor(0.5f, 0.5f);
     }
 }
