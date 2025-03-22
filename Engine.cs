@@ -40,7 +40,7 @@ namespace Eden
             Height = height;
             Title = title;
 
-            FPS = 60;
+            //FPS = 60;
         }
 
         public void Run()
@@ -92,13 +92,13 @@ namespace Eden
             Raylib.ClearBackground(Color.Black);
             Scene.BeforeRender();
             Scene.Render();
+            if(Debug){
+            }
             Scene.AfterRender();
             Raylib.DrawText(Log, 1, 1, 20, Color.White);
             if (Debug)
             {
                 Raylib.DrawFPS(1, 1);
-                int numEnts = Scene.Entities.Count;
-                Raylib.DrawText($"num ents: {numEnts}", 1, 24, 30, Color.Red);
             }
             Raylib.EndDrawing();
         }

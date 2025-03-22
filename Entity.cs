@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Dynamic;
 using System.Numerics;
+using Raylib_cs;
 
 namespace Eden
 {
@@ -9,10 +11,24 @@ namespace Eden
 
         public bool Active = true;
         public bool Visible = true;
-        public bool Collidable = true;
+        public bool Collidable { get => Collider != null && collidable; set => collidable = value; }
 
         public Scene Scene { get; private set; }
         public ComponentList Components { get; private set; }
+
+        public Collider? Collider
+        {
+            get => collider;
+            set
+            {
+                collider?.Removed();
+                collider = value;
+                collider?.Added(this);
+            }
+        }
+
+        private Collider? collider;
+        private bool collidable = true;
 
         private int tag;
         internal int depth = 0;
@@ -101,6 +117,7 @@ namespace Eden
         public virtual void Render()
         {
             Components.Render();
+            Collider?.DebugRender(Collidable ? Color.Red : Color.Blue);
         }
 
         /// <summary>
@@ -109,6 +126,7 @@ namespace Eden
         public virtual void DebugRender()
         {
             Components.DebugRender();
+            Collider?.DebugRender(Collidable ? Color.Red : Color.Blue);
         }
 
         public void RemoveSelf()

@@ -340,7 +340,7 @@ namespace Eden
                 Vector2 ret = new()
                 {
                     X = Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.LeftX),
-                    Y = -Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.LeftY)
+                    Y = Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.LeftY)
                 };
                 return ret;
             }
@@ -350,8 +350,6 @@ namespace Eden
                 Vector2 ret = GetLeftStick();
                 if (ret.LengthSquared() < deadzone * deadzone)
                     ret = Vector2.Zero;
-                else
-                    ret.Y = -ret.Y;
                 return ret;
             }
 
@@ -360,7 +358,7 @@ namespace Eden
                 Vector2 ret = new()
                 {
                     X = Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.RightX),
-                    Y = -Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.RightY)
+                    Y = Raylib.GetGamepadAxisMovement(PlayerIndex, GamepadAxis.RightY)
                 };
                 return ret;
             }
@@ -370,8 +368,6 @@ namespace Eden
                 Vector2 ret = GetRightStick();
                 if (ret.LengthSquared() < deadzone * deadzone)
                     ret = Vector2.Zero;
-                else
-                    ret.Y = -ret.Y;
                 return ret;
             }
 

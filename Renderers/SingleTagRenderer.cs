@@ -12,7 +12,13 @@ namespace Eden
         public SingleTagRenderer(BitTag tag)
         {
             Tag = tag;
-            Camera = new Camera2D(Engine.ScreenCenter, Engine.ScreenCenter, 0, 1);
+            Camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1);
+        }
+
+        public SingleTagRenderer CenterCamera()
+        {
+            Camera.Offset = Engine.ScreenCenter;
+            return this;
         }
 
         public override void BeforeRender(Scene scene)
