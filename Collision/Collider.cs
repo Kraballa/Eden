@@ -65,6 +65,19 @@ namespace Eden
             return this;
         }
 
+        public bool CollideCheck(Collider collider)
+        {
+            if (collider is Hitbox)
+            {
+                return CollideCheck(collider as Hitbox);
+            }
+            if (collider is CollisionGrid)
+            {
+                return CollideCheck(collider as CollisionGrid);
+            }
+            throw new NotImplementedException("error, collision against collider type not implemented");
+        }
+
         public abstract bool CollideCheck(Hitbox other);
         public abstract bool CollideCheck(CollisionGrid other);
         public abstract void DebugRender(Color color);
