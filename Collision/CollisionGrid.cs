@@ -64,12 +64,10 @@ namespace Eden
         public bool CheckRect(int x, int y, int w, int h)
         {
             int posY = 50;
-            Raylib.DrawText("collision checks:", 10, 38, 10, Color.White);
             for (int xx = Math.Max(0, x); xx < Math.Min(CellsX, x + w); xx++)
             {
                 for (int yy = Math.Max(0, y); yy < Math.Min(CellsY, y + h); yy++)
                 {
-                    Raylib.DrawText($"pos: {xx}:{yy}", 10, posY, 10, Color.White);
                     posY += 12;
                     if (Data[xx, yy])
                         return true;
