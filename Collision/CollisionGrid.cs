@@ -49,10 +49,10 @@ namespace Eden
 
         public override bool CollideCheck(Hitbox other)
         {
-            int x = (int)((other.Position.X - Left) / CellWidth);
-            int y = (int)((other.Position.Y - Top) / CellHeight);
-            int w = (int)((other.Right - Left) / CellWidth) - x + 1;
-            int h = (int)((other.Bottom - Top) / CellHeight) - y + 1;
+            int x = (int)Math.Floor((other.Position.X - Left) / CellWidth);
+            int y = (int)Math.Floor((other.Position.Y - Top) / CellHeight);
+            int w = (int)Math.Floor((other.Right - Left) / CellWidth) - x + 1;
+            int h = (int)Math.Floor((other.Bottom - Top) / CellHeight) - y + 1;
             return CheckRect(x, y, w, h);
         }
 
