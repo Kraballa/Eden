@@ -49,6 +49,7 @@ namespace Eden
 
             while (!Raylib.WindowShouldClose())
             {
+                MInput.Update();
                 Update();
                 Draw();
             }
@@ -56,6 +57,7 @@ namespace Eden
 
         protected virtual void Init()
         {
+            MInput.Initialize();
             Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
             Raylib.SetTargetFPS(TargetFPS);
             Raylib.InitWindow(Width, Height, Title);

@@ -64,7 +64,7 @@ namespace Eden
             {
                 get
                 {
-                    return Calc.SignThreshold(MInput.GamePads[GamepadIndex].GetLeftStick().X, Deadzone);
+                    return Calc.Threshold(MInput.GamePads[GamepadIndex].GetLeftStick().X, Deadzone);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace Eden
             {
                 get
                 {
-                    return Calc.SignThreshold(MInput.GamePads[GamepadIndex].GetLeftStick().Y, Deadzone);
+                    return Calc.Threshold(MInput.GamePads[GamepadIndex].GetLeftStick().Y, Deadzone);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Eden
             {
                 get
                 {
-                    return Calc.SignThreshold(MInput.GamePads[GamepadIndex].GetRightStick().X, Deadzone);
+                    return Calc.Threshold(MInput.GamePads[GamepadIndex].GetRightStick().X, Deadzone);
                 }
             }
         }
@@ -124,7 +124,7 @@ namespace Eden
             {
                 get
                 {
-                    return Calc.SignThreshold(MInput.GamePads[GamepadIndex].GetRightStick().Y, Deadzone);
+                    return Calc.Threshold(MInput.GamePads[GamepadIndex].GetRightStick().Y, Deadzone);
                 }
             }
         }
