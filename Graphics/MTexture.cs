@@ -37,7 +37,6 @@ namespace Eden
             Texture = texture;
             ClipRect = rect;
             TargetRect = ClipRect;
-            DrawOffset = new Vector2(rect.X, rect.Y);
         }
 
         public MTexture(MTexture parent, int x, int y, int width, int height) : this(parent.Texture, x, y, width, height)

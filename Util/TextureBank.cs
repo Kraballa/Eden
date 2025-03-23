@@ -22,6 +22,10 @@ namespace Eden
                     return outTex;
                 }
                 Texture2D tex = Raylib.LoadTexture(path);
+                if (tex.Width == 0)
+                {
+                    throw new Exception($"error, couldn't load image at path '{path}'");
+                }
                 globalTextures.Add(path, tex);
                 return tex;
             }
@@ -32,6 +36,10 @@ namespace Eden
                     return outTex;
                 }
                 Texture2D tex = Raylib.LoadTexture(path);
+                if (tex.Width == 0)
+                {
+                    throw new Exception($"error, couldn't load image at path '{path}'");
+                }
                 sceneTextures.Add(path, tex);
                 return tex;
             }
