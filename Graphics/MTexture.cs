@@ -1,4 +1,3 @@
-using System.Net.NetworkInformation;
 using System.Numerics;
 using Raylib_cs;
 
@@ -36,7 +35,7 @@ namespace Eden
         {
             Texture = texture;
             ClipRect = rect;
-            TargetRect = ClipRect;
+            TargetRect = rect;
         }
 
         public MTexture(MTexture parent, int x, int y, int width, int height) : this(parent.Texture, x, y, width, height)
@@ -85,8 +84,8 @@ namespace Eden
         public void Draw(Vector2 pos, Vector2 origin, Vector2 scale, float rotation, Color color)
         {
             TargetRect.Position = pos - DrawOffset;
-            TargetRect.Width = Width * scale.X;
-            TargetRect.Height = Height * scale.Y;
+            TargetRect.Width = ClipRect.Width * scale.X;
+            TargetRect.Height = ClipRect.Height * scale.Y;
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, origin - DrawOffset, rotation, color);
         }
 

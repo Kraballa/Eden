@@ -65,21 +65,29 @@ namespace Eden
             return this;
         }
 
-        public bool CollideCheck(Collider collider)
+        public bool Collide(Collider collider)
         {
             if (collider is Hitbox)
             {
-                return CollideCheck(collider as Hitbox);
+                return Collide(collider as Hitbox);
             }
             if (collider is CollisionGrid)
             {
-                return CollideCheck(collider as CollisionGrid);
+                return Collide(collider as CollisionGrid);
             }
             throw new NotImplementedException("error, collision against collider type not implemented");
         }
 
-        public abstract bool CollideCheck(Hitbox other);
-        public abstract bool CollideCheck(CollisionGrid other);
+        public bool Collide(Entity ent)
+        {
+            if (!ent.Collidable)
+                return false;
+            return Collide(ent.Collider);
+        }
+
+        public abstract bool Collide(Vector2 point);
+        public abstract bool Collide(Hitbox other);
+        public abstract bool Collide(CollisionGrid other);
         public abstract void DebugRender(Color color);
     }
 }

@@ -1,4 +1,3 @@
-using System.Dynamic;
 using System.Numerics;
 
 namespace Eden
@@ -24,7 +23,7 @@ namespace Eden
             {
                 for (int y = 0; y < Data.GetLength(1); y++)
                 {
-                    if (Data[x, y] > 0)
+                    if (Data[x, y] >= 0)
                         Tileset[Data[x, y]].Draw(Position + new Vector2(x * Tileset.TileWidth, y * Tileset.TileHeight));
                 }
             }

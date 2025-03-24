@@ -1,5 +1,4 @@
 using System.Numerics;
-using Raylib_cs;
 
 namespace Eden
 {
@@ -18,7 +17,7 @@ namespace Eden
 
         public override void Render()
         {
-            Texture.Draw(Position + Entity.Position, Origin, Scale, Rotation, Tint);
+            Texture.Draw(Position + Entity.Position, Origin, Scale * Entity.Transform.Scale, Rotation, Tint);
         }
 
         public MImage SetOrigin(float x, float y)
@@ -30,22 +29,22 @@ namespace Eden
 
         public MImage CenterOrigin()
         {
-            Origin.X = Width / 2f;
-            Origin.Y = Height / 2f;
+            Origin.X = Texture.ClipRect.Width / 2f;
+            Origin.Y = Texture.ClipRect.Height / 2f;
             return this;
         }
 
         public MImage JustifyOrigin(Vector2 at)
         {
-            Origin.X = Width * at.X;
-            Origin.Y = Height * at.Y;
+            Origin.X = Texture.ClipRect.Width * at.X;
+            Origin.Y = Texture.ClipRect.Height * at.Y;
             return this;
         }
 
         public MImage JustifyOrigin(float x, float y)
         {
-            Origin.X = Width * x;
-            Origin.Y = Height * y;
+            Origin.X = Texture.ClipRect.Width * x;
+            Origin.Y = Texture.ClipRect.Height * y;
             return this;
         }
     }

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 
 namespace Eden
@@ -17,19 +18,24 @@ namespace Eden
             Height = height;
         }
 
-        public override bool CollideCheck(Hitbox other)
+        public override bool Collide(Hitbox other)
         {
             return !(other.Left > Right || other.Right < Left || other.Top > Bottom || other.Bottom < Top);
         }
 
-        public override bool CollideCheck(CollisionGrid other)
+        public override bool Collide(CollisionGrid other)
         {
-            return other.CollideCheck(this);
+            return other.Collide(this);
         }
 
         public override void DebugRender(Color color)
         {
             Raylib.DrawRectangleLines((int)Position.X, (int)Position.Y, (int)Width, (int)Height, color);
+        }
+
+        public override bool Collide(Vector2 point)
+        {
+            return point.X > Left && point.X < Right && point.Y > Top && point.Y < Bottom;
         }
     }
 }

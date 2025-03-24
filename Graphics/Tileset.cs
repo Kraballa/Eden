@@ -1,10 +1,11 @@
-using System.Runtime.Serialization;
 using System.Xml;
 
 namespace Eden
 {
     public class Tileset
     {
+        private static Dictionary<string, Tileset> CachedTilesets = new();
+
         public MTexture Texture;
         public int TileWidth;
         public int TileHeight;
@@ -13,10 +14,16 @@ namespace Eden
 
         public static Tileset FromTiledTileset(string path)
         {
+            if (CachedTilesets.ContainsKey(path))
+            {
+                return CachedTilesets[path];
+            }
+
             XmlDocument document = new XmlDocument();
             document.Load(path);
             XmlNode tilesetNode = document.DocumentElement.SelectSingleNode("/tileset");
-            foreach(XmlAttribute attr in tilesetNode.Attributes){
+            foreach (XmlAttribute attr in tilesetNode.Attributes)
+            {
                 Console.WriteLine($"{attr.Name}: {attr.Value}");
             }
             int tileheight = int.Parse(tilesetNode.Attributes["tileheight"].Value);
@@ -25,7 +32,10 @@ namespace Eden
             string imageSource = imageNode.Attributes["source"].Value;
             imageSource = Path.Join(Path.GetDirectoryName(path), imageSource);
             MTexture texture = new MTexture(TextureBank.Get(imageSource));
-            return new Tileset(texture, tilewidth, tileheight);
+
+            Tileset tileset = new Tileset(texture, tilewidth, tileheight);
+            CachedTilesets[path] = tileset;
+            return tileset;
         }
 
         public Tileset(MTexture texture, int tileWidth, int tileHeight)

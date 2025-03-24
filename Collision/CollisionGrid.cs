@@ -1,6 +1,4 @@
-using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Channels;
+using System.Numerics;
 using Raylib_cs;
 
 namespace Eden
@@ -47,7 +45,7 @@ namespace Eden
         public override float Top => Position.Y;
         public override float Bottom => Position.Y + CellsY * CellHeight;
 
-        public override bool CollideCheck(Hitbox other)
+        public override bool Collide(Hitbox other)
         {
             int x = (int)Math.Floor((other.Position.X - Left) / CellWidth);
             int y = (int)Math.Floor((other.Position.Y - Top) / CellHeight);
@@ -56,7 +54,7 @@ namespace Eden
             return CheckRect(x, y, w, h);
         }
 
-        public override bool CollideCheck(CollisionGrid other)
+        public override bool Collide(CollisionGrid other)
         {
             throw new NotImplementedException();
         }
@@ -86,6 +84,13 @@ namespace Eden
                         Raylib.DrawRectangleLines((int)(x * CellWidth + Position.X), (int)(y * CellHeight + Position.Y), (int)CellWidth, (int)CellHeight, color);
                 }
             }
+        }
+
+        public override bool Collide(Vector2 point)
+        {
+            int x = (int)Math.Floor((point.X - Left) / CellWidth);
+            int y = (int)Math.Floor((point.Y - Top) / CellHeight);
+            return Data[x, y];
         }
     }
 }
