@@ -22,6 +22,11 @@ namespace Eden.UI
 
         }
 
+        public Sizing(int value) : this(SType.Fixed, value)
+        {
+
+        }
+
         public Sizing(SType type, int value)
         {
             Type = type;
