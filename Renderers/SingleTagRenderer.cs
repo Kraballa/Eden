@@ -8,6 +8,8 @@ namespace Eden
     {
         public BitTag Tag;
         public Camera2D Camera;
+        public Rectangle ScissorRect;
+        public bool ClipRender;
 
         public SingleTagRenderer(BitTag tag)
         {
@@ -24,6 +26,10 @@ namespace Eden
         public override void BeforeRender(Scene scene)
         {
             Raylib.BeginMode2D(Camera);
+            if (ClipRender)
+            {
+                Raylib.BeginScissorMode((int)ScissorRect.X, (int)ScissorRect.Y, (int)ScissorRect.Width, (int)ScissorRect.Height);
+            }
         }
 
         public override void Render(Scene scene)
@@ -35,6 +41,10 @@ namespace Eden
 
         public override void AfterRender(Scene scene)
         {
+            if (ClipRender)
+            {
+                Raylib.EndScissorMode();
+            }
             Raylib.EndMode2D();
         }
     }

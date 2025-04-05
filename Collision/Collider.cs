@@ -5,7 +5,7 @@ namespace Eden
 {
     public abstract class Collider
     {
-        Vector2 Offset = new();
+        public Vector2 Offset {get; set;}
         public abstract float Width { get; set; }
         public abstract float Height { get; set; }
         public abstract float Left { get; }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Numerics;
 using Raylib_cs;
 
 namespace Eden
@@ -116,6 +117,173 @@ namespace Eden
         }
 
         #endregion
+
+
+        #region Collisions v Tags
+
+        public bool CollideCheck(Vector2 point, int tag)
+        {
+            var list = TagLists[(int)tag];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    return true;
+            return false;
+        }
+
+        public Entity CollideFirst(Vector2 point, int tag)
+        {
+            var list = TagLists[(int)tag];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    return list[i];
+            return null;
+        }
+
+        public void CollideInto(Vector2 point, int tag, List<Entity> hits)
+        {
+            var list = TagLists[(int)tag];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    hits.Add(list[i]);
+        }
+
+        public List<Entity> CollideAll(Vector2 point, int tag)
+        {
+            List<Entity> list = new List<Entity>();
+            CollideInto(point, tag, list);
+            return list;
+        }
+
+        public void CollideDo(Vector2 point, int tag, Action<Entity> action)
+        {
+            var list = TagLists[(int)tag];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    action(list[i]);
+        }
+
+        #endregion
+
+        #region Collisions v Tracked List Entities
+
+        public bool CollideCheck<T>(Vector2 point) where T : Entity
+        {
+            var list = Tracker.Entities[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    return true;
+            return false;
+        }
+
+        public T CollideFirst<T>(Vector2 point) where T : Entity
+        {
+            var list = Tracker.Entities[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    return list[i] as T;
+            return null;
+        }
+
+        public void CollideInto<T>(Vector2 point, List<Entity> hits) where T : Entity
+        {
+            var list = Tracker.Entities[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    hits.Add(list[i]);
+        }
+
+        public void CollideInto<T>(Vector2 point, List<T> hits) where T : Entity
+        {
+            var list = Tracker.Entities[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    hits.Add(list[i] as T);
+        }
+
+        public List<T> CollideAll<T>(Vector2 point) where T : Entity
+        {
+            List<T> list = new List<T>();
+            CollideInto<T>(point, list);
+            return list;
+        }
+
+        public void CollideDo<T>(Vector2 point, Action<T> action) where T : Entity
+        {
+            var list = Tracker.Entities[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Collidable && list[i].CollidePoint(point))
+                    action(list[i] as T);
+        }
+
+        #endregion
+
+        #region Collisions v Tracked List Components
+
+        public bool CollideCheckByComponent<T>(Vector2 point) where T : Component
+        {
+            var list = Tracker.Components[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Entity.Collidable && list[i].Entity.CollidePoint(point))
+                    return true;
+            return false;
+        }
+
+        public T CollideFirstByComponent<T>(Vector2 point) where T : Component
+        {
+            var list = Tracker.Components[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Entity.Collidable && list[i].Entity.CollidePoint(point))
+                    return list[i] as T;
+            return null;
+        }
+
+        public void CollideIntoByComponent<T>(Vector2 point, List<Component> hits) where T : Component
+        {
+            var list = Tracker.Components[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Entity.Collidable && list[i].Entity.CollidePoint(point))
+                    hits.Add(list[i]);
+        }
+
+        public void CollideIntoByComponent<T>(Vector2 point, List<T> hits) where T : Component
+        {
+            var list = Tracker.Components[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Entity.Collidable && list[i].Entity.CollidePoint(point))
+                    hits.Add(list[i] as T);
+        }
+
+        public List<T> CollideAllByComponent<T>(Vector2 point) where T : Component
+        {
+            List<T> list = new List<T>();
+            CollideIntoByComponent<T>(point, list);
+            return list;
+        }
+
+        public void CollideDoByComponent<T>(Vector2 point, Action<T> action) where T : Component
+        {
+            var list = Tracker.Components[typeof(T)];
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].Entity.Collidable && list[i].Entity.CollidePoint(point))
+                    action(list[i] as T);
+        }
+
+        #endregion
+
 
         #region Utils
 

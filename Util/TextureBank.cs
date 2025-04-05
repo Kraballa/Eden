@@ -17,7 +17,7 @@ namespace Eden
         {
             if (scope == ResourceScope.Engine)
             {
-                if (sceneTextures.TryGetValue(path, out Texture2D outTex))
+                if (globalTextures.TryGetValue(path, out Texture2D outTex))
                 {
                     return outTex;
                 }

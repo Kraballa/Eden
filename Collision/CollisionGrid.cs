@@ -15,6 +15,15 @@ namespace Eden
         public float CellWidth { get; private set; }
         public float CellHeight { get; private set; }
 
+        public CollisionGrid(bool[,] data, float cellWidth, float cellheight)
+        {
+            Data = data;
+            CellsX = data.GetLength(0);
+            CellsY = data.GetLength(1);
+            CellWidth = cellWidth;
+            CellHeight = cellheight;
+        }
+
         public CollisionGrid(int cellX, int cellY, int cellWidth, int cellHeight)
         {
             Data = new bool[cellX, cellY];
