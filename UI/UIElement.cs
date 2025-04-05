@@ -4,6 +4,8 @@ namespace Eden.UI
 {
     public class UIElement
     {
+        public static float RenderScale = 1;
+
         public Point Position;
         public Point Dimension;
         public Sizing SizingX;
@@ -75,6 +77,48 @@ namespace Eden.UI
             PositionChildren();
         }
 
+        public virtual void Render()
+        {
+            Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
+            if (Engine.Instance.Debug)
+            {
+                string str = Position.ToString() + " ";
+                if (SizingX.Type == SType.Fit) str += "*";
+                else if (SizingX.Type == SType.Grow) str += "^";
+                str += Width + ":";
+                if (SizingY.Type == SType.Fit) str += "*";
+                else if (SizingY.Type == SType.Grow) str += "^";
+                str += Height;
+                Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);
+            }
+
+            foreach (UIElement child in Children)
+            {
+                child.Render();
+            }
+        }
+
+        public UIElement? Hovering()
+        {
+            Point mPos = (Raylib.GetMousePosition() / RenderScale).ToPoint();
+
+            if (mPos.X < X || mPos.X > X + Width - 1 || mPos.Y < Y || mPos.Y > Y + Height - 1)
+            {
+                return null;
+            }
+
+            foreach (UIElement child in Children)
+            {
+                UIElement? maybeHover = child.Hovering();
+                if (child.Hovering() != null)
+                {
+                    return maybeHover;
+                }
+            }
+
+            return this;
+        }
+
         private void FitSizing()
         {
             if (SizingX.Type == SType.Fixed)
@@ -96,7 +140,7 @@ namespace Eden.UI
             else if (SizingY.Type == SType.Fit)
             {
                 Height = Top + Bottom;
-                if (Layout == Layout.Horizontal)
+                if (Layout == Layout.Vertical)
                 {
                     Height += ChildGap * (Children.Count - 1);
                 }
@@ -104,23 +148,17 @@ namespace Eden.UI
 
             foreach (UIElement child in Children)
             {
-                //reverse breadth first
-                //OPEN
-
                 child.FitSizing();
 
-                //CLOSE
-                if (Parent == null) continue;
-
-                if (Parent.Layout == Layout.Horizontal)
+                if (Layout == Layout.Horizontal)
                 {
-                    if (Parent.SizingX.Type == SType.Fit) Parent.Width += Width;
-                    if (Parent.SizingY.Type == SType.Fit) Parent.Height = Math.Max(Parent.Height, Height + Parent.Top + Parent.Bottom);
+                    if (SizingX.Type == SType.Fit) Width += child.Width;
+                    if (SizingY.Type == SType.Fit) Height = Math.Max(Height, child.Height + Top + Bottom);
                 }
-                else if (Parent.Layout == Layout.Vertical)
+                else if (Layout == Layout.Vertical)
                 {
-                    if (Parent.SizingX.Type == SType.Fit) Parent.Width = Math.Max(Parent.Width, Width + Parent.Left + Parent.Right);
-                    if (Parent.SizingY.Type == SType.Fit) Parent.Height += Height;
+                    if (SizingX.Type == SType.Fit) Width = Math.Max(Width, child.Width + Left + Right);
+                    if (SizingY.Type == SType.Fit) Height += child.Height;
                 }
             }
         }
@@ -223,24 +261,6 @@ namespace Eden.UI
                 child.PositionChildren();
                 if (Layout == Layout.Horizontal) nextPosRelative.X += child.Width + ChildGap;
                 if (Layout == Layout.Vertical) nextPosRelative.Y += child.Height + ChildGap;
-            }
-        }
-
-        public virtual void Render()
-        {
-            string str = Position.ToString() + " ";
-            if (SizingX.Type == SType.Fit) str += "*";
-            else if (SizingX.Type == SType.Grow) str += "^";
-            str += Width + ":";
-            if (SizingY.Type == SType.Fit) str += "*";
-            else if (SizingY.Type == SType.Grow) str += "^";
-            str += Height;
-
-            Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
-            Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);
-            foreach (UIElement child in Children)
-            {
-                child.Render();
             }
         }
     }
