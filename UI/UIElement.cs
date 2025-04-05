@@ -139,11 +139,18 @@ namespace Eden.UI
             int remainingWidth = Width - Left - Right;
             int remainingHeight = Height - Top - Bottom;
 
+            int numGrowingChildren = 0;
+
             foreach (UIElement child in Children)
             {
                 remainingWidth -= child.Width;
+                if (child.SizingX.Type == SType.Grow)
+                {
+                    numGrowingChildren++;
+                }
             }
             remainingWidth -= (Children.Count - 1) * ChildGap;
+            remainingWidth = (int)Math.Floor((float)remainingWidth / numGrowingChildren);
 
             foreach (UIElement child in Children)
             {
