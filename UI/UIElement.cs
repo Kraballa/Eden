@@ -1,0 +1,149 @@
+using Raylib_cs;
+
+namespace Eden.UI
+{
+    public class UIElement
+    {
+        public Point Position;
+        public Point Dimension;
+        public Sizing SizingX;
+        public Sizing SizingY;
+        public Layout Layout;
+
+        public int X
+        {
+            get => Position.X;
+            set => Position.X = value;
+        }
+
+        public int Y
+        {
+            get => Position.Y;
+            set => Position.Y = value;
+        }
+
+        public int Width
+        {
+            get => Dimension.X;
+            set => Dimension.X = value;
+        }
+
+        public int Height
+        {
+            get => Dimension.Y;
+            set => Dimension.Y = value;
+        }
+
+        public int Left { get => Padding[0]; }
+        public int Top { get => Padding[1]; }
+        public int Right { get => Padding[2]; }
+        public int Bottom { get => Padding[3]; }
+
+        public UIElement? Parent;
+        public List<UIElement> Children = new();
+        public Color Background;
+        /// <summary>
+        /// left, top, right, bottom
+        /// </summary>
+        public int[] Padding = [10, 10, 10, 10];
+        public int ChildGap = 10;
+
+        public UIElement()
+        {
+        }
+
+        public UIElement(Sizing sizingX, Sizing sizingY)
+        {
+            SizingX = sizingX;
+            SizingY = sizingY;
+        }
+
+        public UIElement Add(params UIElement[] elems)
+        {
+            foreach (UIElement elem in elems)
+            {
+                elem.Parent = this;
+                Children.Add(elem);
+            }
+            return this;
+        }
+
+        public void CalcLayout()
+        {
+            Point nextPosRelative = new(Left, Top);
+
+            if (SizingX.Type == SType.Fixed)
+            {
+                Width = SizingX.Value;
+            }
+            else
+            {
+                Width = Left + Right;
+                if (Layout == Layout.Horizontal)
+                {
+                    Width += ChildGap * (Children.Count - 1);
+                }
+            }
+            if (SizingY.Type == SType.Fixed)
+            {
+                Height = SizingY.Value;
+            }
+            else
+            {
+                Height = Top + Bottom;
+                if (Layout == Layout.Horizontal)
+                {
+                    Height += ChildGap * (Children.Count - 1);
+                }
+            }
+
+            foreach (UIElement child in Children)
+            {
+                child.Position = nextPosRelative + Position;
+                child.Open();
+                child.CalcLayout();
+                child.Close();
+                if (Layout == Layout.Horizontal) nextPosRelative.X += child.Width + ChildGap;
+                if (Layout == Layout.Vertical) nextPosRelative.Y += child.Height + ChildGap;
+            }
+        }
+
+
+        public void Render()
+        {
+            string str = Position.ToString() + " " + Dimension.ToString();
+
+            Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
+            Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);
+            foreach (UIElement child in Children)
+            {
+                child.Render();
+            }
+        }
+
+        private void Open()
+        {
+
+        }
+
+        private void Close()
+        {
+            if (Parent == null) return;
+
+            // Parent.Width += Parent.Left + Parent.Right;
+            // Parent.Height += Parent.Top + Parent.Bottom;
+
+            if (Parent.Layout == Layout.Horizontal)
+            {
+                if (Parent.SizingX.Type == SType.Fit) Parent.Width += Width;
+                if (Parent.SizingY.Type == SType.Fit) Parent.Height = Math.Max(Parent.Height, Height + Parent.Top + Parent.Bottom);
+            }
+            else if (Parent.Layout == Layout.Vertical)
+            {
+                if (Parent.SizingX.Type == SType.Fit) Parent.Width = Math.Max(Parent.Width, Width + Parent.Left + Parent.Right);
+                if (Parent.SizingY.Type == SType.Fit) Parent.Height += Height;
+            }
+        }
+    }
+
+}
