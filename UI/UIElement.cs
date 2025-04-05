@@ -70,8 +70,13 @@ namespace Eden.UI
 
         public void CalcLayout()
         {
-            Point nextPosRelative = new(Left, Top);
+            FitSizing();
+            GrowSizing();
+            PositionChildren();
+        }
 
+        private void FitSizing()
+        {
             if (SizingX.Type == SType.Fixed)
             {
                 Width = SizingX.Value;
@@ -99,15 +104,71 @@ namespace Eden.UI
 
             foreach (UIElement child in Children)
             {
+                //reverse breadth first
+                //OPEN
+
+                child.FitSizing();
+
+                //CLOSE
+                if (Parent == null) continue;
+
+                if (Parent.Layout == Layout.Horizontal)
+                {
+                    if (Parent.SizingX.Type == SType.Fit) Parent.Width += Width;
+                    if (Parent.SizingY.Type == SType.Fit) Parent.Height = Math.Max(Parent.Height, Height + Parent.Top + Parent.Bottom);
+                }
+                else if (Parent.Layout == Layout.Vertical)
+                {
+                    if (Parent.SizingX.Type == SType.Fit) Parent.Width = Math.Max(Parent.Width, Width + Parent.Left + Parent.Right);
+                    if (Parent.SizingY.Type == SType.Fit) Parent.Height += Height;
+                }
+            }
+        }
+
+        private void GrowSizing()
+        {
+            if (SizingX.Type == SType.Grow)
+            {
+                Width = SizingX.Value;
+            }
+            if (SizingY.Type == SType.Grow)
+            {
+                Height = SizingY.Value;
+            }
+
+            int remainingWidth = Width - Left - Right;
+            int remainingHeight = Height - Top - Bottom;
+
+            foreach (UIElement child in Children)
+            {
+                remainingWidth -= child.Width;
+            }
+            remainingWidth -= (Children.Count - 1) * ChildGap;
+
+            foreach (UIElement child in Children)
+            {
+                if (child.SizingX.Type == SType.Grow)
+                {
+                    child.Width += remainingWidth;
+                }
+                if (child.SizingY.Type == SType.Grow)
+                {
+                    child.Height += remainingHeight;
+                }
+            }
+        }
+
+        private void PositionChildren()
+        {
+            Point nextPosRelative = new(Left, Top);
+            foreach (UIElement child in Children)
+            {
                 child.Position = nextPosRelative + Position;
-                child.Open();
-                child.CalcLayout();
-                child.Close();
+                child.PositionChildren();
                 if (Layout == Layout.Horizontal) nextPosRelative.X += child.Width + ChildGap;
                 if (Layout == Layout.Vertical) nextPosRelative.Y += child.Height + ChildGap;
             }
         }
-
 
         public virtual void Render()
         {
@@ -126,30 +187,5 @@ namespace Eden.UI
                 child.Render();
             }
         }
-
-        private void Open()
-        {
-
-        }
-
-        private void Close()
-        {
-            if (Parent == null) return;
-
-            // Parent.Width += Parent.Left + Parent.Right;
-            // Parent.Height += Parent.Top + Parent.Bottom;
-
-            if (Parent.Layout == Layout.Horizontal)
-            {
-                if (Parent.SizingX.Type == SType.Fit) Parent.Width += Width;
-                if (Parent.SizingY.Type == SType.Fit) Parent.Height = Math.Max(Parent.Height, Height + Parent.Top + Parent.Bottom);
-            }
-            else if (Parent.Layout == Layout.Vertical)
-            {
-                if (Parent.SizingX.Type == SType.Fit) Parent.Width = Math.Max(Parent.Width, Width + Parent.Left + Parent.Right);
-                if (Parent.SizingY.Type == SType.Fit) Parent.Height += Height;
-            }
-        }
     }
-
 }
