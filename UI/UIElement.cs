@@ -168,16 +168,15 @@ namespace Eden.UI
                 roundingErrorPerChild = (float)(remainingHeight - growingChildValue * numGrowingChildren) / numGrowingChildren;
             }
 
-
             float runningError = 0;
 
             foreach (UIElement child in Children)
             {
-                runningError += roundingErrorPerChild;
                 if (child.SizingX.Type == SType.Grow)
                 {
                     if (Layout == Layout.Horizontal)
                     {
+                        runningError += roundingErrorPerChild;
                         child.Width += growingChildValue;
                         if (runningError >= 1)
                         {
@@ -198,6 +197,7 @@ namespace Eden.UI
                     }
                     else
                     {
+                        runningError += roundingErrorPerChild;
                         child.Height += growingChildValue;
                         if (runningError >= 1)
                         {
