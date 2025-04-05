@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Eden
@@ -134,6 +135,11 @@ namespace Eden
         public override bool Equals(object obj)
         {
             return obj is Point && Equals((Point)obj);
+        }
+
+        public Vector2 ToVector2()
+        {
+            return new Vector2(X, Y);
         }
     }
 }

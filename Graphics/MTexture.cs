@@ -5,8 +5,8 @@ namespace Eden
 {
     public class MTexture
     {
-        public int Width => Texture.Width;
-        public int Height => Texture.Height;
+        public int Width => (int)ClipRect.Width;
+        public int Height => (int)ClipRect.Height;
 
         public Texture2D Texture;
         public Rectangle ClipRect;

@@ -76,7 +76,7 @@ namespace Eden.UI
             {
                 Width = SizingX.Value;
             }
-            else
+            else if (SizingX.Type == SType.Fit)
             {
                 Width = Left + Right;
                 if (Layout == Layout.Horizontal)
@@ -88,7 +88,7 @@ namespace Eden.UI
             {
                 Height = SizingY.Value;
             }
-            else
+            else if (SizingY.Type == SType.Fit)
             {
                 Height = Top + Bottom;
                 if (Layout == Layout.Horizontal)
@@ -109,9 +109,15 @@ namespace Eden.UI
         }
 
 
-        public void Render()
+        public virtual void Render()
         {
-            string str = Position.ToString() + " " + Dimension.ToString();
+            string str = Position.ToString() + " ";
+            if (SizingX.Type == SType.Fit) str += "*";
+            else if (SizingX.Type == SType.Grow) str += "^";
+            str += Width + ":";
+            if (SizingY.Type == SType.Fit) str += "*";
+            else if (SizingY.Type == SType.Grow) str += "^";
+            str += Height;
 
             Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
             Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);

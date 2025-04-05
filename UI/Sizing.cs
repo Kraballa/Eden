@@ -4,6 +4,7 @@ namespace Eden.UI
     {
         Fit,
         Fixed,
+        Grow
     }
 
     public enum Layout
