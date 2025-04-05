@@ -28,7 +28,7 @@ namespace Eden.UI
 
         }
 
-        public Sizing(SType type, int value)
+        public Sizing(SType type, int value = 0)
         {
             Type = type;
             Value = value;

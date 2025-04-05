@@ -127,15 +127,6 @@ namespace Eden.UI
 
         private void GrowSizing()
         {
-            if (SizingX.Type == SType.Grow)
-            {
-                Width = SizingX.Value;
-            }
-            if (SizingY.Type == SType.Grow)
-            {
-                Height = SizingY.Value;
-            }
-
             int remainingWidth = Width - Left - Right;
             int remainingHeight = Height - Top - Bottom;
 
@@ -143,17 +134,40 @@ namespace Eden.UI
 
             foreach (UIElement child in Children)
             {
-                remainingWidth -= child.Width;
-                if (child.SizingX.Type == SType.Grow)
+                if (Layout == Layout.Horizontal)
                 {
-                    numGrowingChildren++;
+                    remainingWidth -= child.Width;
+                    if (child.SizingX.Type == SType.Grow)
+                    {
+                        numGrowingChildren++;
+                    }
+                }
+                else
+                {
+                    remainingHeight -= child.Height;
+                    if (child.SizingY.Type == SType.Grow)
+                    {
+                        numGrowingChildren++;
+                    }
                 }
             }
-            remainingWidth -= (Children.Count - 1) * ChildGap;
-            int growingChildWidth = (int)Math.Floor((float)remainingWidth / numGrowingChildren);
 
+            int growingChildValue;
             //this much error is being introduced per child
-            float roundingErrorPerChild = (float)(remainingWidth - growingChildWidth * numGrowingChildren) / numGrowingChildren;
+            float roundingErrorPerChild;
+            if (Layout == Layout.Horizontal)
+            {
+                remainingWidth -= (Children.Count - 1) * ChildGap;
+                growingChildValue = (int)Math.Floor((float)remainingWidth / numGrowingChildren);
+                roundingErrorPerChild = (float)(remainingWidth - growingChildValue * numGrowingChildren) / numGrowingChildren;
+            }
+            else
+            {
+                remainingHeight -= (Children.Count - 1) * ChildGap;
+                growingChildValue = (int)Math.Floor((float)remainingHeight / numGrowingChildren);
+                roundingErrorPerChild = (float)(remainingHeight - growingChildValue * numGrowingChildren) / numGrowingChildren;
+            }
+
 
             float runningError = 0;
 
@@ -162,16 +176,41 @@ namespace Eden.UI
                 runningError += roundingErrorPerChild;
                 if (child.SizingX.Type == SType.Grow)
                 {
-                    child.Width += growingChildWidth;
-                    if(runningError >= 1){
-                        child.Width++;
-                        runningError--;
+                    if (Layout == Layout.Horizontal)
+                    {
+                        child.Width += growingChildValue;
+                        if (runningError >= 1)
+                        {
+                            child.Width++;
+                            runningError--;
+                        }
+                    }
+                    else
+                    {
+                        child.Width += remainingWidth;
                     }
                 }
                 if (child.SizingY.Type == SType.Grow)
                 {
-                    child.Height += remainingHeight;
+                    if (Layout == Layout.Horizontal)
+                    {
+                        child.Height += remainingHeight;
+                    }
+                    else
+                    {
+                        child.Height += growingChildValue;
+                        if (runningError >= 1)
+                        {
+                            child.Height++;
+                            runningError--;
+                        }
+                    }
                 }
+            }
+
+            foreach (UIElement child in Children)
+            {
+                child.GrowSizing();
             }
         }
 
