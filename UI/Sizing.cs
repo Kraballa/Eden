@@ -2,9 +2,9 @@ namespace Eden.UI
 {
     public enum SType
     {
-        Fit,
-        Fixed,
-        Grow
+        Fit, // fit to children
+        Fixed, // fixed sizing
+        Grow // grow to parent
     }
 
     public enum Layout

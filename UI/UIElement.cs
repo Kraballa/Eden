@@ -150,13 +150,23 @@ namespace Eden.UI
                 }
             }
             remainingWidth -= (Children.Count - 1) * ChildGap;
-            remainingWidth = (int)Math.Floor((float)remainingWidth / numGrowingChildren);
+            int growingChildWidth = (int)Math.Floor((float)remainingWidth / numGrowingChildren);
+
+            //this much error is being introduced per child
+            float roundingErrorPerChild = (float)(remainingWidth - growingChildWidth * numGrowingChildren) / numGrowingChildren;
+
+            float runningError = 0;
 
             foreach (UIElement child in Children)
             {
+                runningError += roundingErrorPerChild;
                 if (child.SizingX.Type == SType.Grow)
                 {
-                    child.Width += remainingWidth;
+                    child.Width += growingChildWidth;
+                    if(runningError >= 1){
+                        child.Width++;
+                        runningError--;
+                    }
                 }
                 if (child.SizingY.Type == SType.Grow)
                 {
