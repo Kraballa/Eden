@@ -1,4 +1,6 @@
+using System.Data;
 using System.Numerics;
+using Raylib_cs;
 
 namespace Eden
 {
@@ -19,9 +21,27 @@ namespace Eden
         public override void Render()
         {
             base.Render();
-            for (int x = 0; x < Data.GetLength(0); x++)
+
+            bool useClipping = Scene.ActiveRenderer is SingleTagRenderer;
+
+            int minX = 0;
+            int minY = 0;
+            int width = Data.GetLength(0) - 1;
+            int height = Data.GetLength(1) - 1;
+
+            if (useClipping)
             {
-                for (int y = 0; y < Data.GetLength(1); y++)
+                SingleTagRenderer renderer = Scene.ActiveRenderer as SingleTagRenderer;
+                Rectangle clipRect = renderer.Camera.GetClipRect();
+                minX = Math.Max(minX, (int)Math.Floor(clipRect.X / Tileset.TileWidth));
+                minY = Math.Max(minY, (int)Math.Floor(clipRect.Y / Tileset.TileHeight));
+                width = Math.Min(width - minX + 1, (int)Math.Ceiling(clipRect.Width / Tileset.TileWidth) + 1);
+                height = Math.Min(height - minY + 1, (int)Math.Ceiling(clipRect.Height / Tileset.TileHeight) + 1);
+            }
+
+            for (int x = minX; x < minX + width; x++)
+            {
+                for (int y = minY; y < minY + height; y++)
                 {
                     if (Data[x, y] >= 0)
                         Tileset[Data[x, y]].Draw(Position + new Vector2(x * Tileset.TileWidth, y * Tileset.TileHeight));

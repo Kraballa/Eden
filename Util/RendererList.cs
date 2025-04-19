@@ -17,7 +17,7 @@ namespace Eden
             adding = new List<Renderer>();
             removing = new List<Renderer>();
         }
-        
+
         internal void UpdateLists()
         {
             if (adding.Count > 0)
@@ -42,6 +42,7 @@ namespace Eden
             {
                 if (!Renderers[i].Visible)
                     continue;
+                scene.ActiveRenderer = Renderers[i];
                 Renderers[i].BeforeRender(scene);
             }
         }
@@ -52,6 +53,7 @@ namespace Eden
             {
                 if (!Renderers[i].Visible)
                     continue;
+                scene.ActiveRenderer = Renderers[i];
                 Renderers[i].Render(scene);
             }
         }
@@ -62,6 +64,7 @@ namespace Eden
             {
                 if (!Renderers[i].Visible)
                     continue;
+                scene.ActiveRenderer = Renderers[i];
                 Renderers[i].AfterRender(scene);
             }
         }

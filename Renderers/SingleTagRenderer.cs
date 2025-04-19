@@ -25,27 +25,31 @@ namespace Eden
 
         public override void BeforeRender(Scene scene)
         {
+            
+        }
+
+        public override void Render(Scene scene)
+        {
             Raylib.BeginMode2D(Camera);
             if (ClipRender)
             {
                 Raylib.BeginScissorMode((int)ScissorRect.X, (int)ScissorRect.Y, (int)ScissorRect.Width, (int)ScissorRect.Height);
             }
-        }
 
-        public override void Render(Scene scene)
-        {
             foreach (var entity in scene[Tag])
                 if (entity.Visible)
                     entity.Render();
-        }
 
-        public override void AfterRender(Scene scene)
-        {
             if (ClipRender)
             {
                 Raylib.EndScissorMode();
             }
             Raylib.EndMode2D();
+        }
+
+        public override void AfterRender(Scene scene)
+        {
+            
         }
     }
 }

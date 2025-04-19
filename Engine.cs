@@ -81,6 +81,8 @@ namespace Eden
             if (nextScene != null)
             {
                 currentScene = nextScene;
+                currentScene.Begin();
+                nextScene = null;
             }
             Scene.BeforeUpdate();
             Scene.Update();

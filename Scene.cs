@@ -15,6 +15,7 @@ namespace Eden
         public RendererList RendererList { get; private set; }
         public Entity HelperEntity { get; private set; }
         public Tracker Tracker { get; private set; }
+        public Renderer ActiveRenderer { get; set; }
 
         private Dictionary<int, double> actualDepthLookup;
 

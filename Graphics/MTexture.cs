@@ -45,7 +45,7 @@ namespace Eden
 
         public MTexture(MTexture parent, Rectangle clipRect) : this(parent.Texture, clipRect)
         {
-            
+
         }
 
         public void SetClipRect(int x, int y, int width, int height)
@@ -89,6 +89,54 @@ namespace Eden
             ClipRect.Width = Math.Sign(scale.X) * Math.Abs(ClipRect.Width);
             ClipRect.Height = Math.Sign(scale.Y) * Math.Abs(ClipRect.Height);
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, origin - DrawOffset, rotation, color);
+        }
+
+        public void Draw9Slice(int sliceW, int sliceH, Point point, int width, int height)
+        {
+            //top left
+            ClipRect = new Rectangle(0, 0, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X, point.Y, sliceW, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //top right
+            ClipRect = new Rectangle(sliceW * 2, 0, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + width - sliceW, point.Y, sliceW, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //bottom left
+            ClipRect = new Rectangle(0, sliceH * 2, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X, point.Y + height - sliceH, sliceW, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //bottom right
+            ClipRect = new Rectangle(sliceW * 2, sliceH * 2, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + width - sliceW, point.Y + height - sliceH, sliceW, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //center
+            ClipRect = new Rectangle(sliceW, sliceH, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + sliceW, point.Y + sliceH, width - sliceW * 2, height - sliceH * 2);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //top
+            ClipRect = new Rectangle(sliceW, 0, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + sliceW, point.Y, width - sliceW * 2, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //bottom
+            ClipRect = new Rectangle(sliceW, sliceH * 2, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + sliceW, point.Y + height - sliceH, width - sliceW * 2, sliceH);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+
+            //left
+            ClipRect = new Rectangle(0, sliceH, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X, point.Y + sliceH, sliceW, height - sliceH * 2);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+            
+            //right
+            ClipRect = new Rectangle(sliceW * 2, sliceH, sliceW, sliceH);
+            TargetRect = new Rectangle(point.X + width - sliceW, point.Y + sliceH, sliceW, height - sliceH * 2);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
         }
 
         #endregion
