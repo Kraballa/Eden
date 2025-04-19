@@ -2,6 +2,9 @@ using Raylib_cs;
 
 namespace Eden.UI
 {
+    /// <summary>
+    /// parent element of all ui elements including containers.
+    /// </summary>
     public class UIElement
     {
         public static float RenderScale = 1;
@@ -11,6 +14,8 @@ namespace Eden.UI
         public Sizing SizingX;
         public Sizing SizingY;
         public Layout Layout;
+        public bool Selectable = false;
+        public Action OnClick;
 
         public int X
         {
@@ -72,9 +77,18 @@ namespace Eden.UI
 
         public void CalcLayout()
         {
+            OnBeforeCalcLayout();
             FitSizing();
             GrowSizing();
             PositionChildren();
+        }
+
+        protected virtual void OnBeforeCalcLayout()
+        {
+            foreach (UIElement child in Children)
+            {
+                child.OnBeforeCalcLayout();
+            }
         }
 
         public virtual void Render()
@@ -116,10 +130,10 @@ namespace Eden.UI
                 }
             }
 
-            return this;
+            return Selectable ? this : null;
         }
 
-        private void FitSizing()
+        protected virtual void FitSizing()
         {
             if (SizingX.Type == SType.Fixed)
             {
@@ -163,7 +177,7 @@ namespace Eden.UI
             }
         }
 
-        private void GrowSizing()
+        protected virtual void GrowSizing()
         {
             int remainingWidth = Width - Left - Right;
             int remainingHeight = Height - Top - Bottom;
@@ -252,7 +266,7 @@ namespace Eden.UI
             }
         }
 
-        private void PositionChildren()
+        protected virtual void PositionChildren()
         {
             Point nextPosRelative = new(Left, Top);
             foreach (UIElement child in Children)

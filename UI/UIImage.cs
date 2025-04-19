@@ -1,5 +1,8 @@
 namespace Eden.UI
 {
+    /// <summary>
+    /// basic image element.
+    /// </summary>
     public class UIImage : UIElement
     {
         public MTexture Texture;
