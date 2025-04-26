@@ -9,6 +9,7 @@ namespace Eden.UI
     {
         public static float RenderScale = 1;
 
+        public int ChildIndex = -1;
         public Point Position;
         public Point Dimension;
         public Sizing SizingX;
@@ -77,6 +78,10 @@ namespace Eden.UI
 
         public void CalcLayout()
         {
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].ChildIndex = i;
+            }
             OnBeforeCalcLayout();
             FitSizing();
             GrowSizing();
@@ -277,5 +282,51 @@ namespace Eden.UI
                 if (Layout == Layout.Vertical) nextPosRelative.Y += child.Height + ChildGap;
             }
         }
+
+        public UIElement GetNextSibling(bool wrap)
+        {
+            if (Parent == null || ChildIndex == -1) //same thing but w/e
+            {
+                return this;
+            }
+            int nextIdx = ChildIndex + 1;
+            if (nextIdx >= Parent.Children.Count)
+            {
+                if (wrap)
+                {
+                    nextIdx %= Parent.Children.Count;
+                }
+                else
+                {
+                    nextIdx = Parent.Children.Count - 1;
+                }
+            }
+            return Parent.Children[nextIdx];
+        }
+
+        public UIElement GetPrevSibling(bool wrap)
+        {
+            if (Parent == null || ChildIndex == -1) //same thing but w/e
+            {
+                return this;
+            }
+            int nextIdx = ChildIndex - 1;
+            if (nextIdx < 0)
+            {
+                if (wrap)
+                {
+                    nextIdx += Parent.Children.Count;
+                }
+                else
+                {
+                    nextIdx = 0;
+                }
+            }
+            return Parent.Children[nextIdx];
+        }
+
+        // public UIElement GetSiblingRight(bool wrap){
+
+        // }
     }
 }

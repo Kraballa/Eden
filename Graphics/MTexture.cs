@@ -15,8 +15,9 @@ namespace Eden
 
         private Rectangle TargetRect;
 
-        public static MTexture FromFile(string path)
+        public static MTexture FromFile(params string[] subpath)
         {
+            string path =  Path.Join("Content", Path.Join(subpath));
             Texture2D tex = TextureBank.Get(path);
             return new MTexture(tex);
         }
@@ -132,7 +133,7 @@ namespace Eden
             ClipRect = new Rectangle(0, sliceH, sliceW, sliceH);
             TargetRect = new Rectangle(point.X, point.Y + sliceH, sliceW, height - sliceH * 2);
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
-            
+
             //right
             ClipRect = new Rectangle(sliceW * 2, sliceH, sliceW, sliceH);
             TargetRect = new Rectangle(point.X + width - sliceW, point.Y + sliceH, sliceW, height - sliceH * 2);
