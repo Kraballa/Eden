@@ -25,7 +25,7 @@ namespace Eden.UI
         protected override void OnBeforeCalcLayout()
         {
             Vector2 textSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), Text, FontSize, FontSpacing);
-            Vector2 Anchor = new Vector2((Width - textSize.X) * Justify.X, (Height - textSize.Y) * Justify.Y);
+            Anchor = new Vector2((Width - textSize.X) * Justify.X, (Height - textSize.Y) * Justify.Y);
 
             SizingX = new(SType.Fixed, (int)textSize.X);
             SizingY = new(SType.Fixed, (int)textSize.Y);

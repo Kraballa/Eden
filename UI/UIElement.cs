@@ -99,7 +99,7 @@ namespace Eden.UI
         public virtual void Render()
         {
             Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
-            if (Engine.Instance.Debug)
+            if (Engine.Instance != null && Engine.Instance.Debug)
             {
                 string str = Position.ToString() + " ";
                 if (SizingX.Type == SType.Fit) str += "*";
