@@ -11,10 +11,13 @@ namespace Eden
         public Rectangle ScissorRect;
         public bool ClipRender;
 
+        private Vector2 TrueCameraTarget;
+
         public SingleTagRenderer(BitTag tag)
         {
             Tag = tag;
             Camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1);
+            TrueCameraTarget = Camera.Target;
         }
 
         public SingleTagRenderer CenterCamera()
@@ -23,9 +26,14 @@ namespace Eden
             return this;
         }
 
+        public void CameraApproach(Vector2 target, float speed)
+        {
+            TrueCameraTarget = Vector2.Lerp(TrueCameraTarget, target, speed * Raylib.GetFrameTime());
+        }
+
         public override void BeforeRender(Scene scene)
         {
-            
+            Camera.Target = new Vector2(MathF.Round(TrueCameraTarget.X), MathF.Round(TrueCameraTarget.Y));
         }
 
         public override void Render(Scene scene)
@@ -49,7 +57,7 @@ namespace Eden
 
         public override void AfterRender(Scene scene)
         {
-            
+
         }
     }
 }

@@ -33,10 +33,10 @@ namespace Eden
             {
                 SingleTagRenderer renderer = Scene.ActiveRenderer as SingleTagRenderer;
                 Rectangle clipRect = renderer.Camera.GetClipRect();
-                minX = Math.Max(minX, (int)Math.Floor(clipRect.X / Tileset.TileWidth));
-                minY = Math.Max(minY, (int)Math.Floor(clipRect.Y / Tileset.TileHeight));
-                width = Math.Min(width - minX + 1, (int)Math.Ceiling(clipRect.Width / Tileset.TileWidth) + 1);
-                height = Math.Min(height - minY + 1, (int)Math.Ceiling(clipRect.Height / Tileset.TileHeight) + 1);
+                minX = Math.Max(minX, (int)Math.Floor(clipRect.X / (Tileset.TileWidth * Scale.X)));
+                minY = Math.Max(minY, (int)Math.Floor(clipRect.Y / (Tileset.TileHeight * Scale.Y)));
+                width = Math.Min(width - minX + 1, (int)Math.Ceiling(clipRect.Width / (Tileset.TileWidth * Scale.X)) + 1);
+                height = Math.Min(height - minY + 1, (int)Math.Ceiling(clipRect.Height / (Tileset.TileHeight * Scale.Y)) + 1);
             }
 
             for (int x = minX; x < minX + width; x++)
@@ -44,7 +44,7 @@ namespace Eden
                 for (int y = minY; y < minY + height; y++)
                 {
                     if (Data[x, y] >= 0)
-                        Tileset[Data[x, y]].Draw(Position + new Vector2(x * Tileset.TileWidth, y * Tileset.TileHeight));
+                        Tileset[Data[x, y]].Draw(Position + new Vector2(x * Tileset.TileWidth * Scale.X, y * Tileset.TileHeight * Scale.Y), Vector2.Zero, Scale, 0, Color.White);
                 }
             }
         }
