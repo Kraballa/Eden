@@ -15,6 +15,7 @@ namespace Eden
 
         public static Texture2D Get(string path, ResourceScope scope = ResourceScope.Engine)
         {
+            path = "Content/" + path;
             if (scope == ResourceScope.Engine)
             {
                 if (globalTextures.TryGetValue(path, out Texture2D outTex))

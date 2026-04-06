@@ -101,6 +101,7 @@ namespace Eden.UI
             Raylib.DrawRectangle(Position.X, Position.Y, Dimension.X, Dimension.Y, Background);
             if (Engine.Instance != null && Engine.Instance.Debug)
             {
+                Raylib.DrawRectangleLines(Position.X, Position.Y, Dimension.X, Dimension.Y, Color.White);
                 string str = Position.ToString() + " ";
                 if (SizingX.Type == SType.Fit) str += "*";
                 else if (SizingX.Type == SType.Grow) str += "^";
@@ -108,8 +109,9 @@ namespace Eden.UI
                 if (SizingY.Type == SType.Fit) str += "*";
                 else if (SizingY.Type == SType.Grow) str += "^";
                 str += Height;
-                Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);
+                // Raylib.DrawText(str, Position.X, Position.Y, 10, Color.White);
             }
+            
 
             foreach (UIElement child in Children)
             {

@@ -40,7 +40,6 @@ namespace Eden
             Height = height;
             Title = title;
 
-            //FPS = 60;
         }
 
         public void Run()
@@ -61,6 +60,9 @@ namespace Eden
             Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
             Raylib.SetTargetFPS(TargetFPS);
             Raylib.InitWindow(Width, Height, Title);
+
+            FPS = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
+            Console.WriteLine($"Target FPS set to {FPS}");
 
             Tracker.Initialize();
         }

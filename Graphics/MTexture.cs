@@ -17,7 +17,7 @@ namespace Eden
 
         public static MTexture FromFile(params string[] subpath)
         {
-            string path =  Path.Join("Content", Path.Join(subpath));
+            string path = Path.Join(subpath);
             Texture2D tex = TextureBank.Get(path);
             return new MTexture(tex);
         }
