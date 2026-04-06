@@ -33,7 +33,7 @@ namespace Eden
 
         public override void BeforeRender(Scene scene)
         {
-            Camera.Target = new Vector2(MathF.Round(TrueCameraTarget.X), MathF.Round(TrueCameraTarget.Y));
+            Camera.Target = new Vector2(MathF.Round(TrueCameraTarget.X * Camera.Zoom), MathF.Round(TrueCameraTarget.Y * Camera.Zoom)) / Camera.Zoom;
         }
 
         public override void Render(Scene scene)

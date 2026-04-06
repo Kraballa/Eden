@@ -39,7 +39,6 @@ namespace Eden
             Width = width;
             Height = height;
             Title = title;
-
         }
 
         public void Run()
