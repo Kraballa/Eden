@@ -57,7 +57,7 @@ namespace Eden
         {
             MInput.Initialize();
             Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
-            Raylib.SetTargetFPS(TargetFPS);
+            // Raylib.SetTargetFPS(TargetFPS);
             Raylib.InitWindow(Width, Height, Title);
 
             FPS = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());

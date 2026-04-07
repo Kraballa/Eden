@@ -15,7 +15,7 @@ namespace Eden
         public override void Render()
         {
             base.Render();
-            Raylib.DrawRectangle((int)Entity.Position.X, (int)Entity.Position.Y, (int)Scale.X, (int)Scale.Y, Color.White);
+            Raylib.DrawPixel((int)(Entity.Position.X + Position.X), (int)(Entity.Position.Y + Position.Y), Tint);
         }
     }
 }

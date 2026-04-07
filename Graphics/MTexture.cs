@@ -74,6 +74,16 @@ namespace Eden
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, rotation, Color.White);
         }
 
+        public void Draw(Vector2 pos, Vector2 scale)
+        {
+            TargetRect.Position = pos - DrawOffset;
+            TargetRect.Width = Math.Abs(ClipRect.Width) * scale.X;
+            TargetRect.Height = Math.Abs(ClipRect.Height) * scale.Y;
+            ClipRect.Width = Math.Sign(scale.X) * Math.Abs(ClipRect.Width);
+            ClipRect.Height = Math.Sign(scale.Y) * Math.Abs(ClipRect.Height);
+            Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, Vector2.Zero, 0, Color.White);
+        }
+
         public void Draw(Vector2 pos, float rotation, float scale, Color tint)
         {
             TargetRect.Position = pos - DrawOffset;
