@@ -48,6 +48,13 @@ namespace Eden
                 if (entity.Visible)
                     entity.Render();
 
+            if (Engine.Instance.Debug)
+            {
+                foreach (var entity in scene[Tag])
+                    if (entity.Visible)
+                        entity.DebugRender();
+            }
+
             if (ClipRender)
             {
                 Raylib.EndScissorMode();

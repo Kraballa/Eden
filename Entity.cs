@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Numerics;
+using Raylib_cs;
 
 namespace Eden
 {
@@ -123,6 +124,7 @@ namespace Eden
         public virtual void DebugRender()
         {
             Components.DebugRender();
+            Collider?.DebugRender(Color.Red);
         }
 
         public void RemoveSelf()

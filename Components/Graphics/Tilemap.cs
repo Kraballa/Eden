@@ -44,7 +44,7 @@ namespace Eden
                 for (int y = minY; y < minY + height; y++)
                 {
                     if (Data[x, y] >= 0)
-                        Tileset[Data[x, y]].Draw(Position + new Vector2(x * Tileset.TileWidth * Scale.X, y * Tileset.TileHeight * Scale.Y), Vector2.Zero, Scale, 0, Color.White);
+                        Tileset[Data[x, y]].Draw(Position + Origin + new Vector2(x * Tileset.TileWidth * Scale.X, y * Tileset.TileHeight * Scale.Y), Vector2.Zero, Scale, 0, Color.White);
                 }
             }
         }
