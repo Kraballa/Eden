@@ -7,11 +7,12 @@ namespace Eden
     public class SingleTagRenderer : Renderer
     {
         public BitTag Tag;
-        public Camera2D Camera;
+        public ref Camera2D Camera => ref camera;
         public Rectangle ScissorRect;
         public bool ClipRender;
 
         private Vector2 TrueCameraTarget;
+        private Camera2D camera;
 
         public SingleTagRenderer(BitTag tag)
         {

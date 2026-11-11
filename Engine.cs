@@ -56,7 +56,8 @@ namespace Eden
         protected virtual void Init()
         {
             MInput.Initialize();
-            Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
+            // msaa makes pixelart sampling bad
+            // Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
             // Raylib.SetTargetFPS(TargetFPS);
             Raylib.InitWindow(Width, Height, Title);
 
