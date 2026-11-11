@@ -103,13 +103,13 @@ namespace Eden
         {
             if (UseRawDeltaTime)
             {
-                sineCounter += sineAdd * Raylib.GetFrameTime();
-                Counter -= increment * Raylib.GetFrameTime();
+                sineCounter += sineAdd * RaylibExt.GetSafeFrameTime();
+                Counter -= increment * RaylibExt.GetSafeFrameTime();
             }
             else
             {
-                sineCounter += sineAdd * Raylib.GetFrameTime();
-                Counter -= increment * Raylib.GetFrameTime();
+                sineCounter += sineAdd * RaylibExt.GetSafeFrameTime();
+                Counter -= increment * RaylibExt.GetSafeFrameTime();
             }
 
             if (Counter <= 0)

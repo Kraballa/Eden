@@ -99,7 +99,7 @@ namespace Eden
         {
             int x = (int)Math.Floor((point.X - Left) / CellWidth);
             int y = (int)Math.Floor((point.Y - Top) / CellHeight);
-            return Data[x, y];
+            return this[x, y];
         }
     }
 }

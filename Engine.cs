@@ -82,12 +82,15 @@ namespace Eden
             }
             if (nextScene != null)
             {
-                currentScene = nextScene;
-                currentScene.Begin();
+                var scene = nextScene;
                 nextScene = null;
+                currentScene?.End();
+                currentScene = scene;
+                currentScene.Begin();
             }
             Scene.BeforeUpdate();
             Scene.Update();
+            Scene.AfterUpdate();
         }
 
         public void Draw()

@@ -258,7 +258,7 @@ namespace Eden
             // {
             //     // if (rumbleTime > 0)
             //     // {
-            //     //     rumbleTime -= Raylib.GetFrameTime();
+            //     //     rumbleTime -= RaylibExt.GetSafeFrameTime();
             //     //     if (rumbleTime <= 0)
             //     //         Raylib.SetGamepadVibration(PlayerIndex, 0, 0, 0);
             //     // }

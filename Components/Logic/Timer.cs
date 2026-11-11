@@ -62,7 +62,7 @@ namespace Eden
 
         public override void Update()
         {
-            TimeLeft -= Raylib.GetFrameTime();
+            TimeLeft -= RaylibExt.GetSafeFrameTime();
             if (TimeLeft <= 0)
             {
                 TimeLeft = 0;

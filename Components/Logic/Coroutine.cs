@@ -33,7 +33,7 @@ namespace Eden
             ended = false;
 
             if (waitTimer > 0)
-                waitTimer -= Raylib.GetFrameTime();
+                waitTimer -= RaylibExt.GetSafeFrameTime();
             else if (enumerators.Count > 0)
             {
                 IEnumerator now = enumerators.Peek();

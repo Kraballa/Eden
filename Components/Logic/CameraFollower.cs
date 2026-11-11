@@ -18,6 +18,6 @@ public class CameraFollower : Component
     {
         if (Entity == null) return;
 
-        Renderer.CameraApproach(new Vector2(MathF.Round(Entity.Position.X), MathF.Round(Entity.Position.Y)), Speed * Raylib.GetFrameTime());
+        Renderer.CameraApproach(new Vector2(MathF.Round(Entity.Position.X), MathF.Round(Entity.Position.Y)), Speed * RaylibExt.GetSafeFrameTime());
     }
 }

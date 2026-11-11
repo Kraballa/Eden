@@ -38,6 +38,9 @@ namespace Eden
         public virtual void Begin()
         {
             Focused = true;
+            Entities.UpdateLists();
+            TagLists.UpdateLists();
+            RendererList.UpdateLists();
             foreach (var entity in Entities)
                 entity.SceneBegin(this);
         }
@@ -54,8 +57,8 @@ namespace Eden
         public virtual void BeforeUpdate()
         {
             if (!Paused)
-                TimeActive += Raylib.GetFrameTime();
-            RawTimeActive += Raylib.GetFrameTime();
+                TimeActive += RaylibExt.GetSafeFrameTime();
+            RawTimeActive += RaylibExt.GetSafeFrameTime();
 
             Entities.UpdateLists();
             TagLists.UpdateLists();
@@ -73,11 +76,9 @@ namespace Eden
 
         public virtual void AfterUpdate()
         {
-            if (OnEndOfFrame != null)
-            {
-                OnEndOfFrame();
-                OnEndOfFrame = null;
-            }
+            var callbacks = OnEndOfFrame;
+            OnEndOfFrame = null;
+            callbacks?.Invoke();
         }
 
         public virtual void BeforeRender()
@@ -104,7 +105,7 @@ namespace Eden
         /// <returns></returns>
         public bool OnInterval(float interval)
         {
-            return (int)((TimeActive - Raylib.GetFrameTime()) / interval) < (int)(TimeActive / interval);
+            return (int)((TimeActive - RaylibExt.GetSafeFrameTime()) / interval) < (int)(TimeActive / interval);
         }
 
         /// <summary>
@@ -114,7 +115,7 @@ namespace Eden
         /// <returns></returns>
         public bool OnInterval(float interval, float offset)
         {
-            return Math.Floor((TimeActive - offset - Raylib.GetFrameTime()) / interval) < Math.Floor((TimeActive - offset) / interval);
+            return Math.Floor((TimeActive - offset - RaylibExt.GetSafeFrameTime()) / interval) < Math.Floor((TimeActive - offset) / interval);
         }
 
         #endregion

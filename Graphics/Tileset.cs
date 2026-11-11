@@ -47,12 +47,12 @@ namespace Eden
             int numX = texture.Width / tileWidth;
             int numY = texture.Height / tileHeight;
 
-            int numTiles = numX + numY * numX;
+            int numTiles = numX * numY;
 
             Tiles = new MTexture[numTiles];
             for (int i = 0; i < numTiles; i++)
             {
-                Tiles[i] = new MTexture(Texture, (i % numX) * TileWidth, (i / numX) * TileHeight, TileWidth, TileHeight);
+                Tiles[i] = new MTexture(Texture, (int)Texture.ClipRect.X + (i % numX) * TileWidth, (int)Texture.ClipRect.Y + (i / numX) * TileHeight, TileWidth, TileHeight);
             }
         }
 

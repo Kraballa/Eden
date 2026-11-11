@@ -29,7 +29,7 @@ namespace Eden
 
         public void CameraApproach(Vector2 target, float speed)
         {
-            TrueCameraTarget = Vector2.Lerp(TrueCameraTarget, target, speed * Raylib.GetFrameTime());
+            TrueCameraTarget = Vector2.Lerp(TrueCameraTarget, target, speed * RaylibExt.GetSafeFrameTime());
         }
 
         public override void BeforeRender(Scene scene)

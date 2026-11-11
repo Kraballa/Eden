@@ -61,7 +61,7 @@ namespace Eden
         public override void Update()
         {
             consumed = false;
-            bufferCounter -= Raylib.GetFrameTime();
+            bufferCounter -= RaylibExt.GetSafeFrameTime();
 
             bool check = false;
             foreach (var node in Nodes)
@@ -89,7 +89,7 @@ namespace Eden
                     repeatCounter = firstRepeatTime;
                 else
                 {
-                    repeatCounter -= Raylib.GetFrameTime();
+                    repeatCounter -= RaylibExt.GetSafeFrameTime();
                     if (repeatCounter <= 0)
                     {
                         Repeating = true;

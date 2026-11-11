@@ -63,7 +63,7 @@ namespace Eden
         {
             if (on && Timer > 0)
             {
-                Timer -= Raylib.GetFrameTime();
+                Timer -= RaylibExt.GetSafeFrameTime();
                 if (Timer <= 0)
                 {
                     on = false;
