@@ -10,7 +10,7 @@ public static class RaylibExt
     /// </summary>
     public static float GetSafeFrameTime()
     {
-        float frameTime = RaylibExt.GetSafeFrameTime();
+        float frameTime = Raylib.GetFrameTime();
         return Math.Min(frameTime, MaxFrameTime);
     }
 }
