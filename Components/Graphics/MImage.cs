@@ -18,7 +18,7 @@ namespace Eden
 
         public override void Render()
         {
-            Texture.Draw(Position + Entity.Position, Origin, Scale * Entity.Transform.Scale, Rotation, Tint);
+            Texture.Draw(Position + Entity.Position, Origin, Scale * Entity.Transform.Scale, Rotation + Entity.Transform.Rotation, Tint);
         }
 
         public MImage SetOrigin(float x, float y)
