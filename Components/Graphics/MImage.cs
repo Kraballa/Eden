@@ -13,7 +13,7 @@ namespace Eden
         public MImage(MTexture texture) : base(false)
         {
             Texture = texture;
-            Scale.X = -1;
+            Scale.X = 1;
         }
 
         public override void Render()
