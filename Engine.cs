@@ -18,6 +18,8 @@ namespace Eden
 
         public static string Log = "";
 
+        protected Color ClearColor = Color.Black;
+
         public int FPS
         {
             get => TargetFPS;
@@ -96,15 +98,15 @@ namespace Eden
         public void Draw()
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.Black);
+            Raylib.ClearBackground(ClearColor);
             Scene.BeforeRender();
             Scene.Render();
             if(Debug){
             }
             Scene.AfterRender();
-            Raylib.DrawText(Log, 1, 1, 20, Color.White);
             if (Debug)
             {
+                Raylib.DrawText(Log, 1, 1, 20, Color.White);
                 Raylib.DrawFPS(1, 1);
             }
             Raylib.EndDrawing();

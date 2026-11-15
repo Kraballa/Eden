@@ -12,6 +12,7 @@ namespace Eden
         public Rectangle ClipRect;
         public Vector2 DrawOffset = Vector2.Zero;
         public MTexture? Parent;
+        public Vector2 Bounds => new Vector2(Width, Height);
 
         private Rectangle TargetRect;
 
