@@ -111,8 +111,8 @@ namespace Eden
         {
             TargetRect.Position = pos - DrawOffset;
             Rectangle clipped = ClipRect;
-            clipped.Width = ClipRect.Width * clipWidthPercent;
-            clipped.Height = ClipRect.Height * clipHeightPercent;
+            clipped.Width = ClipRect.Width * MathF.Min(1, MathF.Max(0, clipWidthPercent));
+            clipped.Height = ClipRect.Height * MathF.Min(1, MathF.Max(0, clipHeightPercent));
             Raylib.DrawTextureRec(Texture, clipped, pos, Color.White);
         }
 
