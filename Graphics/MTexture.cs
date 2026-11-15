@@ -59,11 +59,15 @@ namespace Eden
 
         public void Draw(Vector2 pos)
         {
+            ClipRect.Width = Math.Abs(ClipRect.Width);
+            ClipRect.Height = Math.Abs(ClipRect.Height);
             Raylib.DrawTextureRec(Texture, ClipRect, pos - DrawOffset, Color.White);
         }
 
         public void Draw(Vector2 pos, Color color)
         {
+            ClipRect.Width = Math.Abs(ClipRect.Width);
+            ClipRect.Height = Math.Abs(ClipRect.Height);
             Raylib.DrawTextureRec(Texture, ClipRect, pos - DrawOffset, color);
         }
 
@@ -101,6 +105,15 @@ namespace Eden
             ClipRect.Width = Math.Sign(scale.X) * Math.Abs(ClipRect.Width);
             ClipRect.Height = Math.Sign(scale.Y) * Math.Abs(ClipRect.Height);
             Raylib.DrawTexturePro(Texture, ClipRect, TargetRect, origin - DrawOffset, rotation, color);
+        }
+
+        public void DrawClipped(Vector2 pos, float clipWidthPercent, float clipHeightPercent)
+        {
+            TargetRect.Position = pos - DrawOffset;
+            Rectangle clipped = ClipRect;
+            clipped.Width = ClipRect.Width * clipWidthPercent;
+            clipped.Height = ClipRect.Height * clipHeightPercent;
+            Raylib.DrawTextureRec(Texture, clipped, pos, Color.White);
         }
 
         public void Draw9Slice(int sliceW, int sliceH, Point point, int width, int height)
